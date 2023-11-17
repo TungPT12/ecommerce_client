@@ -1,0 +1,32 @@
+.navbar {
+    font-size: 1.4rem;
+}
+
+.active {
+    color: rgb(224, 177, 90);
+}
+
+.logo {
+    font-size: 1.4rem;
+    font-style: italic;
+    font-weight: 300;
+}
+
+.navbar-icon {
+    color: #000;
+}
+
+.quantity-item-cart {
+    padding: 1px 5.5px;
+    font-size: 0.9rem;
+    right: -8px;
+    top: -8px;
+    color: white;
+    font-weight: 600;
+    background-color: red;
+    border-radius: 8px;
+    z-index: 1;
+    text-align: center;
+    line-height: 100%;
+
+}
