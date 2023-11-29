@@ -1,21 +1,49 @@
-import { useState } from "react"
+// import { useState } from "react"
 
-const useInput = (callbackCheckValidation) => {
-    const [input, setInput] = useState("");
-    const [isTouched, setIsTouched] = useState(false);
-    const isValid = callbackCheckValidation(input);
+// const useInput = (callbackCheckValidation) => {
+//     const [input, setInput] = useState("");
+//     const [isTouched, setIsTouched] = useState(false);
+//     const isValid = callbackCheckValidation(input);
+
+//     const onTouched = () => {
+//         setIsTouched(true);
+//     }
+
+//     return {
+//         input,
+//         isTouched,
+//         isValid,
+//         setInput,
+//         onTouched
+//     }
+// }
+
+// export default useInput
+
+import { useState } from "react";
+
+const useInput = (callback, initValue) => {
+    const [isTouch, setIsTouch] = useState(false);
+    const [input, setInput] = useState(initValue);
+    const isValid = callback(input);
 
     const onTouched = () => {
-        setIsTouched(true);
+        setIsTouch(true);
+    }
+
+    const resetInput = () => {
+        setInput(initValue);
+        setIsTouch(false);
     }
 
     return {
-        input,
-        isTouched,
         isValid,
+        input,
+        isTouch,
+        onTouched,
         setInput,
-        onTouched
+        resetInput
     }
 }
 
-export default useInput
+export default useInput;

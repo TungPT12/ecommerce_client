@@ -1,5 +1,5 @@
 import SignUp from "../../components/SignUp/SignUp";
-import styles from './RegisterPage.module.css'
+import styles from './SignupPage.module.css'
 function RegisterPage() {
     return (
         <div className={`${styles['register-page']}`}>

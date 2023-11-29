@@ -9,8 +9,8 @@ import ShopPage from './page/ShopPage/ShopPage.js';
 import DetailPage from './page/DetailPage/DetailPage';
 import CartPage from './page/CartPage/CartPage';
 import CheckoutPage from './page/CheckoutPage/CheckoutPage';
-import LoginPage from './page/LoginPage/LoginPage';
-import RegisterPage from './page/RegisterPage/RegisterPage';
+import SigninPage from './page/SigninPage/SigninPage';
+import SignupPage from './page/SignupPage/SignupPage';
 import Footer from './Layout/Footer/Footer';
 import NavBar from './Layout/NavBar/NavBar';
 import useHttp from './hook/use-http';
@@ -19,7 +19,7 @@ import Chat from './components/Chat/Chat';
 
 function App() {
 
-  const { isLogin } = useSelector(state => state.authentication)
+  // const { isLogin } = useSelector(state => state.authentication)
   const { sendRequest: sendRequestProducts } = useHttp()
 
   const dispatch = useDispatch()
@@ -37,18 +37,21 @@ function App() {
   return (
     <BrowserRouter>
       <Chat />
+      <NavBar />
       <Routes>
         <Route path='/*' element=<NotFoundPage /> />
-        <Route path='/' element=<HomePage>
-          <NavBar />
-        </HomePage> />
-        <Route path='/shop' element=<ShopPage><NavBar /></ShopPage> />
-        <Route path='/shop/:productType' element=<ShopPage><NavBar /></ShopPage> />
-        <Route path='/detail/:productId' element=<DetailPage><NavBar /></DetailPage> />
-        <Route path='/cart' element={isLogin ? <CartPage><NavBar /></CartPage> : <LoginPage />} />
-        <Route path='/checkout' element={isLogin ? <CheckoutPage><NavBar /></CheckoutPage> : <LoginPage />} />
-        <Route path='/login' element={isLogin ? <HomePage><NavBar /></HomePage> : <LoginPage />} />
-        <Route path='/register' element={isLogin ? <HomePage><NavBar /></HomePage> : <RegisterPage />} />
+        <Route path='/' element=<HomePage /> />
+        <Route path='/shop' element=<ShopPage /> />
+        <Route path='/shop/:productType' element=<ShopPage /> />
+        <Route path='/detail/:productId' element=<DetailPage /> />
+        <Route path='/cart' element=<CartPage /> />
+        <Route path='/checkout' element=<CheckoutPage /> />
+        <Route path='/login' element=<SigninPage /> />
+        <Route path='/signup' element=<SignupPage /> />
+        {/* <Route path='/cart' element={isLogin ? <CartPage /> : <SigninPage />} />
+        <Route path='/checkout' element={isLogin ? <CheckoutPage /> : <SigninPage />} />
+        <Route path='/login' element={isLogin ? <HomePage /> : <SigninPage />} />
+        <Route path='/signup' element={isLogin ? <HomePage /> : <SignupPage />} /> */}
       </Routes>
       <Footer />
     </BrowserRouter>

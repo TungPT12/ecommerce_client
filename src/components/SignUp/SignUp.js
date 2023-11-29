@@ -1,107 +1,125 @@
+import { useEffect, useState } from 'react';
 import useInput from '../../hook/use-input';
-import FindUserByEmail from '../../util/FindUserByEmail';
-import { validateEmail, validateEmptyInput, validatePassword, validatePhoneNumber } from '../../util/ValidateInput';
+import { isEmptyInput, isShowWarning, validPassword, validatePhoneNumber, validatedEmail } from '../../util/input';
+import alertMessage from '../../util/warningMessage';
 import styles from './SignUp.module.css'
+import { useSelector } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
-let userArr = localStorage.getItem("userArr") ? JSON.parse(localStorage.getItem("userArr")) : [];
+import { signup } from '../../apis/authn';
 
 function SignUp() {
-    const navigate = useNavigate()
+    // const { isAuthn } = useSelector(state => state.authn)
+    const [isDuplicateUserName, setIsDuplicateUserName] = useState(false);
+    const [isDuplicateEmail, setIsDuplicateEmail] = useState(false);
+    const navigate = useNavigate();
+    // useEffect(() => {
+    //     if (isAuthn) {
+    //         navigate('/');
+    //     }
+    //     // eslint-disable-next-line react-hooks/exhaustive-deps
+    // }, [isAuthn])
     const {
-        input: inputFullName,
-        isTouched: isTouchedFullName,
         isValid: isValidFullName,
+        input: inputFullName,
+        isTouch: isTouchFullName,
+        onTouched: onTouchedFullName,
         setInput: setInputFullName,
-        onTouched: onTouchedFullName
-    } = useInput(validateEmptyInput);
+    } = useInput(isEmptyInput, '');
     const {
-        input: inputEmail,
-        isTouched: isTouchedEmail,
-        isValid: isValidEmail,
-        setInput: setInputEmail,
-        onTouched: onTouchedEmail
-    } = useInput(validateEmail);
-
-    const {
-        input: inputPassword,
-        isTouched: isTouchedPassword,
         isValid: isValidPassword,
+        input: inputPassword,
+        isTouch: isTouchPassword,
+        onTouched: onTouchedPassword,
         setInput: setInputPassword,
-        onTouched: onTouchedPassword
-    } = useInput(validatePassword);
-
+    } = useInput(validPassword, '');
     const {
-        input: inputPhone,
-        isTouched: isTouchedPhone,
-        isValid: isValidPhone,
-        setInput: setInputPhone,
-        onTouched: onTouchedPhone
-    } = useInput(validatePhoneNumber);
+        isValid: isValidEmail,
+        input: inputEmail,
+        isTouch: isTouchEmail,
+        onTouched: onTouchedEmail,
+        setInput: setInputEmail,
+    } = useInput(validatedEmail, '');
+    const {
+        isValid: isValidPhoneNumber,
+        input: inputPhoneNumber,
+        isTouch: isTouchPhoneNumber,
+        onTouched: onTouchedPhoneNumber,
+        setInput: setInputPhoneNumber,
+    } = useInput(validatePhoneNumber, '');
 
-    const isValidSubmit = isValidFullName && isValidPassword && isValidPhone && isValidEmail
+    const isValidSubmit = isValidFullName && isValidPassword && isValidEmail && isValidPhoneNumber;
 
-    const isShowMsg = (isTouched, isValid) => {
-        if (isTouched) {
-            return isValid ? false : true
-        }
-    }
-
-    const onSubmit = (event) => {
-        event.preventDefault();
+    const onSubmitSignup = (e) => {
+        e.preventDefault();
         const user = {
-            fullName: inputFullName,
-            email: inputEmail,
-            password: inputPassword,
-            phone: inputPhone,
+            fullName: inputFullName.trim(),
+            password: inputPassword.trim(),
+            phoneNumber: inputPhoneNumber.trim(),
+            email: inputEmail.trim(),
         }
-        const position = FindUserByEmail(userArr, inputEmail)
-        if (position < 0) {
-            userArr.push(user)
-            localStorage.setItem("userArr", JSON.stringify(userArr))
+        signup(user).then((response) => {
+            if (response.status !== 200) {
+                setIsDuplicateEmail(false);
+                setIsDuplicateUserName(false);
+                if (response.data.message === "Duplicate User Name" || response.data.message === "Duplicate Email") {
+                    if (response.data.message === "Duplicate User Name") {
+                        setIsDuplicateUserName(true)
+                    } else if (response.data.message === "Duplicate Email") {
+                        setIsDuplicateEmail(true)
+                    }
+                    throw new Error(response.data.message);
+                } else {
+                    throw new Error(response.data.message);
+                }
+            }
+            alert('Successfully')
+            return;
+        }).then(() => {
             navigate('/login')
-        } else {
-            alert("This email is exist!")
-        }
+        }).catch((error) => {
+            console.log(error)
+        })
     }
 
     return (
         <div className={`container w-fit-content ${styles['sign-up']}`}>
             <h3 className={`${styles['title']}`}>Sign Up</h3>
-            <form onSubmit={isValidSubmit ? onSubmit : (e) => {
-                e.preventDefault()
+            <form onSubmit={isValidSubmit ? onSubmitSignup : (e) => {
+                e.preventDefault();
+                onTouchedEmail(true);
+                onTouchedFullName(true);
+                onTouchedPassword(true);
+                onTouchedPhoneNumber(true);
             }} className={` d-flex flex-column ${styles['sign-up-form']}`}>
-                <input type='text' required placeholder='Full Name'
+                <input type='text' onBlur={onTouchedFullName} placeholder='Full Name'
                     value={inputFullName}
                     onChange={(e) => {
                         setInputFullName(e.target.value)
                     }}
-                    onBlur={onTouchedFullName}
                 />
-                {isShowMsg(isTouchedFullName, isValidFullName) ? <p className='ps-2 text-danger bg-danger-subtle mt-1 font-italic'>* Full Name can not empty!</p> : <></>}
-                <input type='email' required placeholder='Email'
+                {isShowWarning(isValidFullName, isTouchFullName) ? alertMessage("Please enter your full name!") : <></>}
+                <input type='email' onBlur={onTouchedEmail} placeholder='Email'
                     value={inputEmail}
                     onChange={(e) => {
                         setInputEmail(e.target.value)
                     }}
-                    onBlur={onTouchedEmail}
                 />
-                {isShowMsg(isTouchedEmail, isValidEmail) ? <p className='ps-2 text-danger bg-danger-subtle mt-1 font-italic'>* Email must have format abc @xyz.abc !</p> : <></>}
-                <input type='password' required placeholder='Password'
+                {isShowWarning(isValidEmail, isTouchEmail) ? alertMessage("Please enter your email! (abc@gmail.com)") : <></>}
+                <input type='password' onBlur={onTouchedPassword} placeholder='Password'
                     value={inputPassword}
                     onChange={(e) => {
                         setInputPassword(e.target.value)
                     }}
-                    onBlur={onTouchedPassword}
                 />
-                {isShowMsg(isTouchedPassword, isValidPassword) ? <p className='ps-2 text-danger bg-danger-subtle mt-1 font-italic'>* Password must have at least 8 character!</p> : <></>}
-                <input type='phone' required placeholder='Phone'
-                    value={inputPhone}
+                {isShowWarning(isValidPassword, isTouchPassword) ? alertMessage("Please enter password at least 8 character!") : <></>}
+                <input type='phone' placeholder='Phone'
+                    value={inputPhoneNumber}
                     onChange={(e) => {
-                        setInputPhone(e.target.value)
+                        setInputPhoneNumber(e.target.value)
                     }}
-                    onBlur={onTouchedPhone}
+                    onBlur={onTouchedPhoneNumber}
                 />
-                {isShowMsg(isTouchedPhone, isValidPhone) ? <p className='ps-2 text-danger bg-danger-subtle mt-1 font-italic'>* Phone is not valid!</p> : <></>}
+                {isShowWarning(isValidPhoneNumber, isTouchPhoneNumber) ? alertMessage("Please enter your phone number!") : <></>}
                 <button className={`${styles['sign-up_btn']} h-100`}>Sign Up</button>
             </form>
             <div className={`${styles['sign-in-link']} text-center mt-5 opacity-75  font-italic`}>

@@ -11,6 +11,7 @@ import BannerOfPage from '../../components/BannerOfPage/BannerOfPage';
 function ShopPage({ children }) {
     window.scrollTo(0, 0)
     const products = useSelector(state => state.products.products)
+    const { isAuthn } = useSelector(state => state.authn)
     const { productType } = useParams()
 
     const [productFilter, setProductFilter] = useState([])

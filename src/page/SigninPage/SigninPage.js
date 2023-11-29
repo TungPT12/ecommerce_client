@@ -1,7 +1,7 @@
 import SignIn from "../../components/SignIn/SignIn";
-import styles from './LoginPage.module.css'
+import styles from './SigninPage.module.css'
 
-function LoginPage() {
+function SigninPage() {
     return (
         <div className={`${styles['login-page']}`}>
             <SignIn />
@@ -9,4 +9,4 @@ function LoginPage() {
     );
 }
 
-export default LoginPage;
+export default SigninPage;

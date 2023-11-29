@@ -3,12 +3,17 @@ import BannerOfPage from "../../components/BannerOfPage/BannerOfPage";
 import styles from './CartPage.module.css'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCaretLeft, faCaretRight, faGift, faLongArrowAltLeft, faLongArrowAltRight, faTrash } from "@fortawesome/free-solid-svg-icons";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import formatPrice from "../../util/FormatPrice";
 import { deleteItemInCart, updateItemInCart } from "../../store/action/CartAction";
+import { authnAction } from "../../store/reducer/authn";
+import { checkIsLoginApi } from "../../apis/authn";
+import { useEffect } from "react";
 // import format
 function CartPage({ children }) {
-    const dispatch = useDispatch()
+    const navigate = useNavigate();
+    const dispatch = useDispatch();
+    const { isAuthn } = useSelector(state => state.authn);
 
     // window.scrollTo(0, 0)
     const { listCart } = useSelector(state => state.cart);
@@ -21,6 +26,39 @@ function CartPage({ children }) {
         dispatch(updateItemInCart(id, actionUpdate))
     }
 
+    const checkIsLogin = () => {
+        checkIsLoginApi().then((response) => {
+            if (response.status === 500) {
+                throw new Error('/500');
+            }
+            if (response.status === 400) {
+                throw new Error('/400');
+            }
+            if (response.status === 404) {
+                throw new Error('/404');
+            }
+            if (response.status === 403 || response.status === 401) {
+                // return
+                throw new Error(response.data.message);
+            }
+            dispatch(authnAction.login(response.data))
+        }).catch((error) => {
+            console.log(error)
+            if (error.message === '/500' || error.message === '/400' || error.message === '/404') {
+                navigate(error.message)
+            } else {
+                navigate('/login')
+            }
+        })
+    }
+
+    useEffect(() => {
+        if (!isAuthn) {
+            checkIsLogin();
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [isAuthn]);
+
     const renderCart = (listCart) => {
         return listCart.map((item) => {
             return <div key={item.id} className="d-flex align-items-center">
@@ -31,13 +69,13 @@ function CartPage({ children }) {
                 <span className={`flex-1 text-center mx-1 ${styles['price']} user-select-none`}>{formatPrice(item.price)} VND</span>
                 <div className="d-flex flex-1 mx-1 justify-content-center">
                     <div className="px-2" onClick={() => {
-                        decreaseQuantity(item.id, "DECREASE")
+                        // decreaseQuantity(item.id, "DECREASE")
                     }}>
                         <FontAwesomeIcon icon={faCaretLeft} className={`${styles['caret-left-icon']}`} />
                     </div>
                     <span className={`${styles['quantity-number']} user-select-none`}>{item.quantity}</span>
                     <div className="px-2" onClick={() => {
-                        increaseQuantity(item.id, "INCREASE")
+                        // increaseQuantity(item.id, "INCREASE")
                     }}>
                         <FontAwesomeIcon icon={faCaretRight} className={`${styles['caret-right-icon']}`} />
                     </div>
@@ -45,7 +83,7 @@ function CartPage({ children }) {
                 <span className={`flex-1 mx-1 text-center ${styles['total-price']} user-select-none`}>{formatPrice((parseFloat(item.price) * item.quantity).toString())} VND</span>
                 <div className={`${styles['remove-item']} flex-1 text-center`}
                     onClick={() => {
-                        dispatch(deleteItemInCart(item.id))
+                        // dispatch(deleteItemInCart(item.id))
                     }}
                 >
                     <FontAwesomeIcon icon={faTrash} className={`${styles['trash-icon']}`} />
@@ -64,7 +102,7 @@ function CartPage({ children }) {
 
     return (
         <>
-            {children}
+            {/* {children} */}
             <div className="container pb-3">
                 <BannerOfPage
                     bigTitle="CART"
