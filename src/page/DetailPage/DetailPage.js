@@ -1,37 +1,66 @@
-import { useSelector } from "react-redux";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import RelativeProduct from "../../components/RelativeProduct/RelativeProduct";
 import ProductDetail from "../../components/ProductDetail/ProductDetail";
-import NotFoundProduct from "../../components/NotFoundProduct/NotFoundProduct";
+import { useEffect, useState } from "react";
+import { getProductByIdApi } from "../../apis/product";
+import LoadingSpinner from "../../components/Loading/LoadingSpinner";
 
 function DetailPage({ children }) {
-
     window.scrollTo(0, 0)
-    const { products } = useSelector(state => state.products)
-    const { productId } = useParams()
+    const navigate = useNavigate();
+    const [isLoading, setIsLoading] = useState(true)
+    const { id } = useParams()
+    const [productDetail, setProductDetail] = useState({})
 
-    const findProductDetail = (productId) => {
-        return products.find((product) => {
-            return product._id.$oid === productId
+    const getProductById = (id) => {
+        getProductByIdApi(id).then((response) => {
+            if (response.status === 500) {
+                throw new Error('/500');
+            }
+            if (response.status === 400) {
+                throw new Error('/400');
+            }
+            if (response.status === 404) {
+                throw new Error('/404');
+            }
+            return response.data
+        }).then((data) => {
+            setIsLoading(false)
+            setProductDetail(data)
+        }).catch((error) => {
+            setIsLoading(false)
+            if (error.message === '/500' || error.message === '/400' || error.message === '/404') {
+                navigate(error.message)
+            }
         })
     }
 
-    const filterRelativeCategory = (category) => {
-        return products.filter((product) => {
-            return product.category === category
-        })
-    }
+    useEffect(() => {
+        console.log(id)
+        getProductById(id)
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [])
 
-    const productDetail = findProductDetail(productId);
+    // const filterRelativeCategory = (category) => {
+    //     return products.filter((product) => {
+    //         return product.category === category
+    //     })
+    // }
+
+    // const productDetail = findProductDetail(productId);
     let relativeProducts = []
-    if (productDetail) {
-        relativeProducts = filterRelativeCategory(productDetail.category)
-        const pos = relativeProducts.findIndex((relativeProduct) => {
-            return productDetail._id.$oid === relativeProduct._id.$oid
-        })
-        if (pos > -1) {
-            relativeProducts.splice(pos, 1)
-        }
+    // if (productDetail) {
+    //     relativeProducts = filterRelativeCategory(productDetail.category)
+    //     const pos = relativeProducts.findIndex((relativeProduct) => {
+    //         return productDetail._id.$oid === relativeProduct._id.$oid
+    //     })
+    //     if (pos > -1) {
+    //         relativeProducts.splice(pos, 1)
+    //     }
+    // }
+
+    const addToCart = () => {
+
     }
 
     return (
@@ -39,14 +68,22 @@ function DetailPage({ children }) {
             {children}
             <div className="container mt-3">
                 {
-                    productDetail ? <>
+                    isLoading ? <LoadingSpinner /> : <>
                         <ProductDetail
+                            images={productDetail.images}
+                            name={productDetail.name}
+                            price={productDetail.price}
+                            short_desc={productDetail.short_desc}
+                            long_desc={productDetail.long_desc}
                             productDetail={productDetail}
+                            categoryName={productDetail.category.name}
+                            categoryId={productDetail.category._id}
+                            onclick={addToCart}
                         />
                         <div>
                             {relativeProducts.length !== 0 ? <RelativeProduct relativeProducts={relativeProducts} /> : <></>}
                         </div>
-                    </> : <NotFoundProduct />
+                    </>
                 }
             </div>
         </>

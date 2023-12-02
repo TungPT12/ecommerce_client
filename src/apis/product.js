@@ -1,4 +1,3 @@
-// import setHeaders from "../utils/setHeaders";
 
 import axiosInstance from "../config/axios";
 
@@ -11,6 +10,16 @@ const getTopTrendingProductApi = async () => {
     }
 }
 
+const getProductByIdApi = async (id) => {
+    try {
+        const response = await axiosInstance.get(`/product/${id}`);
+        return response;
+    } catch (error) {
+        return error.response;
+    }
+}
+
 export {
     getTopTrendingProductApi,
+    getProductByIdApi,
 }

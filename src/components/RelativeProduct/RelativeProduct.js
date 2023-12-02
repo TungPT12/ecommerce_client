@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import Product from "../ProductList/Product/Product";
 import styles from './RelativeProduct.module.css'
-function RelativeProduct({ relativeProducts }) {
+function RelativeProduct({ relativeProducts, categoryId }) {
     const renderRelativeProducts = (relativeProducts) => {
         return relativeProducts.map((relativeProduct) => {
             return <Link to={`/detail/${relativeProduct._id.$oid}`} key={relativeProduct._id.$oid} className="text-decoration-none text-black">

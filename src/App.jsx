@@ -43,7 +43,7 @@ function App() {
         <Route path='/' element=<HomePage /> />
         <Route path='/shop' element=<ShopPage /> />
         <Route path='/shop/:productType' element=<ShopPage /> />
-        <Route path='/detail/:productId' element=<DetailPage /> />
+        <Route path='/detail/:id' element=<DetailPage /> />
         <Route path='/cart' element=<CartPage /> />
         <Route path='/checkout' element=<CheckoutPage /> />
         <Route path='/login' element=<SigninPage /> />
