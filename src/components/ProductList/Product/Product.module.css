@@ -1,5 +1,6 @@
 .product {
     cursor: pointer;
+    height: 100%;
 }
 
 .product:hover {
@@ -41,4 +42,8 @@
 
 .view-detail-btn {
     color: #dcd9d9;
+}
+
+.image-warrper{
+    
 }

@@ -41,11 +41,11 @@ function ProductDetail({ name, price, images, short_desc, long_desc, categoryNam
         <div className="mb-5">
             <div className="row">
                 <div className="col d-flex w-100">
-                    <div className="flex-1 d-flex flex-column gap-2">
+                    <div className="flex-1 d-flex flex-column gap-2 me-1">
                         {renderImage(images)}
                     </div>
                     <div className="flex-4 justify-content-center align-items-center h-100 d-flex">
-                        <img className="w-100" alt={name} src={`${imageShow.includes("http") ? '' : process.env.REACT_APP_API_ENDPOINT_URL_IMAGE}${imageShow}`} />
+                        <img className="w-100" alt={name} src={`${imageShow.includes("http") ? imageShow : process.env.REACT_APP_API_ENDPOINT_URL_IMAGE}${imageShow}`} />
                     </div>
                 </div>
                 <div className="col">

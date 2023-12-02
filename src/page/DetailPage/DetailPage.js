@@ -36,28 +36,10 @@ function DetailPage({ children }) {
     }
 
     useEffect(() => {
-        console.log(id)
+        setIsLoading(true)
         getProductById(id)
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [])
-
-    // const filterRelativeCategory = (category) => {
-    //     return products.filter((product) => {
-    //         return product.category === category
-    //     })
-    // }
-
-    // const productDetail = findProductDetail(productId);
-    let relativeProducts = []
-    // if (productDetail) {
-    //     relativeProducts = filterRelativeCategory(productDetail.category)
-    //     const pos = relativeProducts.findIndex((relativeProduct) => {
-    //         return productDetail._id.$oid === relativeProduct._id.$oid
-    //     })
-    //     if (pos > -1) {
-    //         relativeProducts.splice(pos, 1)
-    //     }
-    // }
+    }, [id])
 
     const addToCart = () => {
 
@@ -81,7 +63,10 @@ function DetailPage({ children }) {
                             onclick={addToCart}
                         />
                         <div>
-                            {relativeProducts.length !== 0 ? <RelativeProduct relativeProducts={relativeProducts} /> : <></>}
+                            {productDetail.category._id ? <RelativeProduct
+                                categoryId={productDetail.category._id}
+                                productId={productDetail._id}
+                            /> : <></>}
                         </div>
                     </>
                 }

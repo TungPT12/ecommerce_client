@@ -39,7 +39,7 @@ function TopTrendingProduct() {
                 isHavePopup={true}
                 key={product._id}
                 id={product._id}
-                img={product.images[0]}
+                image={product.images[0]}
                 name={product.name}
                 price={product.price}
                 short_desc={product.short_desc}

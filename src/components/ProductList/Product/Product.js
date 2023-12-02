@@ -6,12 +6,13 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faClose, faShoppingCart } from '@fortawesome/free-solid-svg-icons';
 import formatPrice from '../../../util/FormatPrice';
 
-function Product({ isHavePopup, id, img, name, price, short_desc }) {
+function Product({ isHavePopup, id, image, name, price, short_desc }) {
     const [isDisplayPopup, setIsDisplayPopup] = useState(false)
 
     const displayPopupProduct = () => {
         setIsDisplayPopup(true);
     }
+
     const closePopupProduct = () => {
         setIsDisplayPopup(false);
     }
@@ -19,10 +20,12 @@ function Product({ isHavePopup, id, img, name, price, short_desc }) {
     return (
         <>
             <div id={id} className={`${styles['product']} animation-zoom-in`} onClick={isHavePopup ? displayPopupProduct : () => { }}>
-                <img
-                    className="w-100 mb-3"
-                    src={img}
-                    alt={name} />
+                <div className={`${styles['image-warrper']} h-75`}>
+                    <img
+                        className="w-100 mb-3 h-100"
+                        src={`${image.includes("http") ? image : process.env.REACT_APP_API_ENDPOINT_URL_IMAGE}${image}`}
+                        alt={name} />
+                </div>
                 <p className={`name text-center font-italic font-weight-900 font-family-Ubuntu mb-1`}>{name}</p>
                 <p className={`price text-center opacity-50 font-weight-light font-monospace`}>{formatPrice(price)} VND</p>
             </div>
@@ -32,7 +35,7 @@ function Product({ isHavePopup, id, img, name, price, short_desc }) {
                         isDisplayPopup ? <Popup>
                             <div className={`${styles['product-popup']} d-flex animation-zoom-in`}>
                                 <div className={`${styles['img-popup']} d-block`}>
-                                    <img src={img} alt={name} className='h-100' />
+                                    <img className="h-100" alt={name} src={`${image.includes("http") ? image : process.env.REACT_APP_API_ENDPOINT_URL_IMAGE}${image}`} />
                                 </div>
                                 <div className={`${styles['description-popup']}`}>
                                     <div className={`${styles['close-popup']} d-flex justify-content-end`}>

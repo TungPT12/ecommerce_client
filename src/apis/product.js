@@ -19,7 +19,18 @@ const getProductByIdApi = async (id) => {
     }
 }
 
+
+const getRelativeProductApi = async (categoryId) => {
+    try {
+        const response = await axiosInstance.get(`/product-by-category/${categoryId}`);
+        return response;
+    } catch (error) {
+        return error.response;
+    }
+}
+
 export {
     getTopTrendingProductApi,
     getProductByIdApi,
+    getRelativeProductApi,
 }
