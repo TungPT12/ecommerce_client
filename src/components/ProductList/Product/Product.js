@@ -6,7 +6,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faClose, faShoppingCart } from '@fortawesome/free-solid-svg-icons';
 import formatPrice from '../../../util/FormatPrice';
 
-function Product({ isHavePopup, id, category, img, long_desc, name, price, short_desc }) {
+function Product({ isHavePopup, id, img, name, price, short_desc }) {
     const [isDisplayPopup, setIsDisplayPopup] = useState(false)
 
     const displayPopupProduct = () => {
@@ -22,7 +22,7 @@ function Product({ isHavePopup, id, category, img, long_desc, name, price, short
                 <img
                     className="w-100 mb-3"
                     src={img}
-                    alt={category} />
+                    alt={name} />
                 <p className={`name text-center font-italic font-weight-900 font-family-Ubuntu mb-1`}>{name}</p>
                 <p className={`price text-center opacity-50 font-weight-light font-monospace`}>{formatPrice(price)} VND</p>
             </div>
@@ -32,7 +32,7 @@ function Product({ isHavePopup, id, category, img, long_desc, name, price, short
                         isDisplayPopup ? <Popup>
                             <div className={`${styles['product-popup']} d-flex animation-zoom-in`}>
                                 <div className={`${styles['img-popup']} d-block`}>
-                                    <img src={img} alt={category} className='h-100' />
+                                    <img src={img} alt={name} className='h-100' />
                                 </div>
                                 <div className={`${styles['description-popup']}`}>
                                     <div className={`${styles['close-popup']} d-flex justify-content-end`}>

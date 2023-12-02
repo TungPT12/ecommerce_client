@@ -1,8 +1,9 @@
 .spinner {
-  display: inline-block;
-  width: 80px;
+  display: flex;
+  justify-content: center;
+  width: 100%;
   height: 80px;
-  margin: 0 50%;
+  align-items: center;
 }
 
 .spinner:after {

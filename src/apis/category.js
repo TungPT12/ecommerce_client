@@ -1,9 +1,8 @@
-import axiosInstance from "../configs/axios/axios";
-import setHeaders from "../utils/setHeaders";
+import axiosInstance from "../config/axios";
 
-const getNumberHotelInAreaApi = async (token, id) => {
+const getCategoriesApi = async (token) => {
     try {
-        const response = await axiosInstance.get(`area/count-hotel/${id}`, setHeaders(token));
+        const response = await axiosInstance.get(`/categories`);
         return response;
     } catch (error) {
         return error.response;
@@ -20,6 +19,6 @@ const getNumberHotelInRandomAreaApi = async () => {
 }
 
 export {
-    getNumberHotelInAreaApi,
+    getCategoriesApi,
     getNumberHotelInRandomAreaApi,
 }

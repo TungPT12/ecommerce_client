@@ -2,62 +2,10 @@ import { Link, useNavigate } from 'react-router-dom';
 import styles from './SignIn.module.css'
 import { useDispatch, useSelector } from 'react-redux';
 import { login } from '../../store/action/AuthenticationAction';
-import { setCartUserLogin } from '../../store/action/CartAction';
 import { useEffect, useState } from 'react';
-import alertMessage from '../../util/warningMessage';
 import { signin } from '../../apis/authn';
 import { authnAction } from '../../store/reducer/authn';
 function SignIn() {
-
-    // const {
-    //     input: inputEmail,
-    //     isTouched: isTouchedEmail,
-    //     isValid: isValidEmail,
-    //     setInput: setInputEmail,
-    //     onTouched: onTouchedEmail
-    // } = useInput(validateEmail);
-
-    // const {
-    //     input: inputPassword,
-    //     isTouched: isTouchedPassword,
-    //     isValid: isValidPassword,
-    //     setInput: setInputPassword,
-    //     onTouched: onTouchedPassword
-    // } = useInput(validateEmptyInput);
-
-    // const isValidSubmit = isValidPassword && isValidEmail
-
-    // const isShowMsg = (isTouched, isValid) => {
-    //     if (isTouched) {
-    //         return isValid ? false : true
-    //     }
-    // }
-
-
-
-    // const onSubmit = (event) => {
-    //     event.preventDefault();
-    //     let userArr = localStorage.getItem("userArr") ? JSON.parse(localStorage.getItem("userArr")) : [];
-    //     const position = FindUserByEmail(userArr, inputEmail)
-    //     if (position > -1) {
-    //         const carts = localStorage.getItem("carts") ? JSON.parse(localStorage.getItem("carts")) : [];
-    //         const email = userArr[position].email
-    //         let cartUser = carts.find((carts) => {
-    //             return carts.email === email
-    //         })
-    //         let cart = []
-    //         if (cartUser) {
-    //             cart = cartUser.cart
-    //         }
-    //         dispatch(login(userArr[position]))
-    //         dispatch(setCartUserLogin(cart))
-    //         navigate("/")
-    //     } else {
-    //         alert("Wrong email or password")
-    //     }
-    // }
-
-    // const { isAuthn } = useSelector(state => state.authn)
     const { isAuthn } = useSelector(state => state.authn)
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');

@@ -8,7 +8,6 @@ function RelativeProduct({ relativeProducts }) {
                 <Product
                     isHavePopup={false}
                     id={relativeProduct._id.$oid}
-                    category={relativeProduct.category}
                     img={relativeProduct.img1}
                     long_desc={relativeProduct.long_desc}
                     name={relativeProduct.name}

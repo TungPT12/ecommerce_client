@@ -6,7 +6,6 @@ import { useSelector } from "react-redux";
 
 function NavBar() {
     const { isAuthn, cart, fullName } = useSelector(state => state.authn)
-    console.log(isAuthn)
     const totalQuantity = cart.items.reduce((total, item) => {
         return total + item.quantity;
     }, 0)

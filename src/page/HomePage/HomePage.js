@@ -1,6 +1,6 @@
 import Banner from "../../components/Banner/Banner";
 import Category from "../../components/Category/Category";
-import ProductList from "../../components/ProductList/ProductList";
+import TopTrendingProduct from "../../components/ProductList/TopTrendingProduct/TopTrendingProduct";
 import OtherInfo from "../../components/OtherInfo/OtherInfo";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
@@ -24,71 +24,17 @@ function HomePage({ children }) {
                 throw new Error('/404');
             }
             if (response.status === 403 || response.status === 401) {
-                return
-                // throw new Error(response.data.message);
+                throw new Error(response.data.message);
             }
             dispatch(authnAction.login(response.data))
         }).catch((error) => {
-            console.log(error)
             if (error.message === '/500' || error.message === '/400' || error.message === '/404') {
                 navigate(error.message)
+            } else {
+                authnAction.logout();
             }
         })
     }
-    // const checkIsLogin = () => {
-    //     checkIsLoginApi().then((response) => {
-    //         if (response.status === 500) {
-    //             throw new Error('/500');
-    //         }
-    //         if (response.status === 400) {
-    //             throw new Error('/400');
-    //         }
-    //         if (response.status === 404) {
-    //             throw new Error('/404');
-    //         }
-    //         if (response.status === 403 || response.status === 401) {
-    //             throw new Error(response.data.message);
-    //         }
-    //         return response.data
-    //     }).then((data) => {
-    //         dispatch(authnAction.login(data))
-    //     }).catch((error) => {
-    //         console.log(error)
-    //         if (error.message === '/500' || error.message === '/400' || error.message === '/404') {
-    //             navigate(error.message)
-    //         } else {
-    //             navigate('/login')
-    //         }
-    //     })
-    // }
-
-    // const getPosts = () => {
-    //     getPostApi().then((response) => {
-    //         if (response.status === 500) {
-    //             throw new Error('/500');
-    //         }
-    //         if (response.status === 400) {
-    //             throw new Error('/400');
-    //         }
-    //         if (response.status === 404) {
-    //             throw new Error('/404');
-    //         }
-    //         if (response.status === 403 || response.status === 401) {
-    //             throw new Error(response.data.message);
-    //         }
-    //         return response.data
-    //     }).then((data) => {
-    //         setIsLoading(false);
-    //         setPosts(data);
-    //     }).catch((error) => {
-    //         console.log(error)
-    //         if (error.message === '/500' || error.message === '/400' || error.message === '/404') {
-    //             navigate(error.message)
-    //         } else {
-    //             navigate('/login')
-    //         }
-    //     })
-    // }
 
     useEffect(() => {
         if (!isAuthn) {
@@ -102,7 +48,7 @@ function HomePage({ children }) {
             <div className="container d-flex flex-column gap-5">
                 <Banner />
                 <Category />
-                <ProductList />
+                <TopTrendingProduct />
                 <OtherInfo />
             </div>
         </div>
