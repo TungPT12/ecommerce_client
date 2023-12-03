@@ -202,3 +202,7 @@ li {
 .icon-warning {
   color: #ff0000b5;
 }
+
+.active-category {
+  color: rgb(224, 177, 90);
+}

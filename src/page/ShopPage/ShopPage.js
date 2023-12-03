@@ -19,6 +19,7 @@ function ShopPage({ children }) {
     const { isAuthn } = useSelector(state => state.authn)
     const navigate = useNavigate();
     const dispatch = useDispatch();
+    // const { productType } = 
     const [isLoadingProducts, setIsLoadingProducts] = useState(true);
     const [isLoadingCategories, setIsLoadingCategories] = useState(true);
     const [categoryId, setCategoryId] = useState('')
@@ -27,6 +28,7 @@ function ShopPage({ children }) {
     const [pageSize, setPageSize] = useState(0)
     const [currentPage, setCurrentPage] = useState(1);
     const [products, setProducts] = useState([]);
+    const [categories, setCategories] = useState([]);
 
     const checkIsLogin = () => {
         checkIsLoginApi().then((response) => {
@@ -71,7 +73,6 @@ function ShopPage({ children }) {
         }).then((data) => {
             setIsLoadingProducts(false);
             setProducts(data.results);
-            setCurrentPage(1);
             setPageSize(data.total_pages)
         }).catch((error) => {
             if (error.message === '/500' || error.message === '/400' || error.message === '/404') {
@@ -93,12 +94,33 @@ function ShopPage({ children }) {
             if (response.status === 404) {
                 throw new Error('/404');
             }
-            return response.data
-        }).then((data) => {
-            setIsLoadingProducts(false);
-            setProducts(data.results);
-            setCurrentPage(1);
-            setPageSize(data.total_pages)
+            return response.data.results
+        }).then((categories) => {
+            let formatCategories = [
+                {
+                    title: 'iphone & mac',
+                    categoriesName: [],
+                },
+                {
+                    title: "wireless",
+                    categoriesName: [],
+                },
+                {
+                    title: "other",
+                    categoriesName: []
+                },
+            ];
+            categories.forEach((category) => {
+                if (category.name.toLowerCase().includes('iphone') || category.name.toLowerCase().includes('macbook')) {
+                    formatCategories[0].categoriesName.push(category);
+                } else if (category.name.toLowerCase().includes('watch') || category.name.toLowerCase().includes('airpod')) {
+                    formatCategories[1].categoriesName.push(category);
+                } else {
+                    formatCategories[2].categoriesName.push(category);
+                }
+            })
+            setIsLoadingCategories(false);
+            setCategories(formatCategories);
         }).catch((error) => {
             if (error.message === '/500' || error.message === '/400' || error.message === '/404') {
                 navigate(error.message)
@@ -109,7 +131,9 @@ function ShopPage({ children }) {
     }
 
     useEffect(() => {
+        setIsLoadingProducts(true)
         getProductsByParams(1, categoryId, name)
+        setCurrentPage(1)
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [categoryId, name]);
 
@@ -120,21 +144,27 @@ function ShopPage({ children }) {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [isAuthn]);
 
-    const renderProductTitleName = () => {
-        return productTitles.map((productTitle, index) => {
-            return <ul key={productTitle.title}>
-                <div className={`${styles['product-title']} text-uppercase font-italic px-3 py-2 font-family-Ubuntu font-weight-900`}>{productTitle.title}</div>
+    useEffect(() => {
+        getCategories();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+
+    const renderProductTitleName = (categories) => {
+        // console.log(categories)
+        return categories.map((category, index) => {
+            return <ul key={category.title}>
+                <div className={`${styles['product-title']} text-uppercase font-italic px-3 py-2 font-family-Ubuntu font-weight-900`}>{category.title}</div>
                 {
-                    productTitle.productTitleNames.map((productTitleName) => {
-                        return <li key={productTitleName.path} className=" px-3 py-3 font-family-Ubuntu">
-                            <NavLink to={`/shop/${productTitleName.path}`}
-                                className={({ isActive }) => {
-                                    const isActiveClass = isActive ? styles.active : styles['product-title-name']
-                                    return `font-family-Ubuntu font-italic text-decoration-none  ${isActiveClass}`;
+                    category.categoriesName.map((categoryName) => {
+                        return <li key={categoryName._id} className=" px-3 py-3 font-family-Ubuntu">
+                            <div
+                                onClick={() => {
+                                    setCategoryId(categoryName._id)
                                 }}
-                                end>
-                                {productTitleName.name}
-                            </NavLink>
+                                className={`font-family-Ubuntu font-italic text-decoration-none ${styles['product-title-name']} ${categoryId === categoryName._id ? styles.active : ''}`}
+                            >
+                                {categoryName.name}
+                            </div>
                         </li>
                     })
                 }
@@ -170,6 +200,12 @@ function ShopPage({ children }) {
         }
     }
 
+    useEffect(() => {
+        setIsLoadingProducts(true)
+        getProductsByParams(currentPage, categoryId, name)
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [currentPage]);
+
     return (
         <>
             {children}
@@ -183,15 +219,14 @@ function ShopPage({ children }) {
                         <h3 className="text-uppercase font-italic mb-4">categories</h3>
                         <h5 className={`${styles['brand-title']} text-uppercase bg-dark px-3 py-2 font-weight-400 font-italic`}>apple</h5>
                         <div className="px-3 py-3 font-family-Ubuntu">
-                            <NavLink to='/shop'
-                                className={({ isActive }) => {
-                                    const isActiveClass = isActive ? styles.active : styles['product-title-name']
-                                    return `font-italic text-decoration-none  ${isActiveClass}`;
+                            <div
+                                className={`font-family-Ubuntu font-italic text-decoration-none ${styles['product-title-name']}  ${categoryId ? '' : styles.active}`}
+                                onClick={() => {
+                                    setCategoryId('')
                                 }}
-                                end
-                            >All</NavLink>
+                            >All</div>
                         </div>
-                        {renderProductTitleName()}
+                        {isLoadingCategories ? <LoadingSpinner /> : renderProductTitleName(categories)}
                     </div>
                     <div className={`${styles['product-filter']}`}>
                         <div className={`${styles['filter']} d-flex justify-content-between`}>
@@ -219,16 +254,16 @@ function ShopPage({ children }) {
                                 </div>
                                 <div className="w-100 d-flex flex-column align-items-end">
                                     <div className="d-flex">
-                                        <button onClick={previousButtonEvent} className={`p-3 ${styles['pre-btn']}`}>
+                                        <button disabled={currentPage <= 1 ? true : false} onClick={previousButtonEvent} className={`p-3 ${styles['pre-btn']}`}>
                                             <FontAwesomeIcon icon={faAngleDoubleLeft} />
                                         </button>
                                         <span className={`bg-dark p-3 ${styles['number-page']}`}>{currentPage}</span>
-                                        <button onClick={nextButtonEvent} className={`p-3 ${styles['next-btn']}`}>
+                                        <button disabled={currentPage >= pageSize ? true : false} onClick={nextButtonEvent} className={`p-3 ${styles['next-btn']}`}>
                                             <FontAwesomeIcon icon={faAngleDoubleRight} />
                                         </button>
                                     </div>
                                     <div>
-                                        Page {currentPage} of {pageSize}
+                                        Page {pageSize > 0 ? currentPage : 0} of {pageSize}
                                     </div>
                                 </div>
                             </>

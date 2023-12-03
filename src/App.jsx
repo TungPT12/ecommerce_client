@@ -42,7 +42,7 @@ function App() {
         <Route path='/*' element=<NotFoundPage /> />
         <Route path='/' element=<HomePage /> />
         <Route path='/shop' element=<ShopPage /> />
-        <Route path='/shop/:productType' element=<ShopPage /> />
+        {/* <Route path='/shop/:productType' element=<ShopPage /> /> */}
         <Route path='/detail/:id' element=<DetailPage /> />
         <Route path='/cart' element=<CartPage /> />
         <Route path='/checkout' element=<CheckoutPage /> />

@@ -1,7 +1,3 @@
-.active {
-    color: rgb(224, 177, 90);
-}
-
 .brand-title {
     color: #ffffffb0;
 }
@@ -17,6 +13,7 @@
 
 .product-title-name {
     color: #939393;
+    cursor: pointer;
 }
 
 .product-filter {
@@ -47,4 +44,8 @@
 .number-page {
     color: #fff;
     font-size: 1rem;
+}
+
+.active {
+    color: rgb(224, 177, 90);
 }
