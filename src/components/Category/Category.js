@@ -42,7 +42,7 @@ function Category() {
                 firstRow.push(<div key={category._id} className={`flex-1 ${styles['category-img']}`}>
                     <img className="w-100 h-100" alt={category.name} src={`${process.env.REACT_APP_API_ENDPOINT_URL_IMAGE}${category.image}`} />
                 </div>)
-            } else {
+            } else if (index >= 2 && index < 5) {
                 secondRow.push(<div key={category._id} className={`flex-1 ${styles['category-img']}`}>
                     <img className="w-100 h-100" alt={category.name} src={`${process.env.REACT_APP_API_ENDPOINT_URL_IMAGE}${category.image}`} />
                 </div>)

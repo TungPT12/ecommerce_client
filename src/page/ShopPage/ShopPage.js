@@ -10,19 +10,23 @@ import BannerOfPage from '../../components/BannerOfPage/BannerOfPage';
 import { checkIsLoginApi } from '../../apis/authn';
 import { cartAction } from '../../store/slice/cart';
 import { authnAction } from '../../store/slice/authn';
+import { getProductsByParamsApi } from '../../apis/product';
+import LoadingSpinner from '../../components/Loading/LoadingSpinner';
+import { getCategoriesApi } from '../../apis/category';
 
 function ShopPage({ children }) {
     window.scrollTo(0, 0)
-    const products = useSelector(state => state.products.products)
     const { isAuthn } = useSelector(state => state.authn)
     const navigate = useNavigate();
     const dispatch = useDispatch();
-    const { productType } = useParams()
-
-    const [productFilter, setProductFilter] = useState([])
+    const [isLoadingProducts, setIsLoadingProducts] = useState(true);
+    const [isLoadingCategories, setIsLoadingCategories] = useState(true);
+    const [categoryId, setCategoryId] = useState('')
+    const [name, setName] = useState('')
     const [search, setSearch] = useState('')
     const [pageSize, setPageSize] = useState(0)
     const [currentPage, setCurrentPage] = useState(1);
+    const [products, setProducts] = useState([]);
 
     const checkIsLogin = () => {
         checkIsLoginApi().then((response) => {
@@ -49,35 +53,65 @@ function ShopPage({ children }) {
         })
     }
 
-    const searchByName = (products) => {
-        if (search) {
-            const filterByName = productFilter.filter((productByName) => {
-                return productByName.name.toUpperCase().includes(search.toUpperCase().trim())
-            })
-            return filterByName;
-        } else {
-            return products;
-        }
+    const getProductsByParams = (page, categoryId, name) => {
+        getProductsByParamsApi(page, {
+            categoryId: categoryId,
+            name: name
+        }).then((response) => {
+            if (response.status === 500) {
+                throw new Error('/500');
+            }
+            if (response.status === 400) {
+                throw new Error('/400');
+            }
+            if (response.status === 404) {
+                throw new Error('/404');
+            }
+            return response.data
+        }).then((data) => {
+            setIsLoadingProducts(false);
+            setProducts(data.results);
+            setCurrentPage(1);
+            setPageSize(data.total_pages)
+        }).catch((error) => {
+            if (error.message === '/500' || error.message === '/400' || error.message === '/404') {
+                navigate(error.message)
+            } else {
+                authnAction.logout();
+            }
+        })
+    }
+
+    const getCategories = () => {
+        getCategoriesApi().then((response) => {
+            if (response.status === 500) {
+                throw new Error('/500');
+            }
+            if (response.status === 400) {
+                throw new Error('/400');
+            }
+            if (response.status === 404) {
+                throw new Error('/404');
+            }
+            return response.data
+        }).then((data) => {
+            setIsLoadingProducts(false);
+            setProducts(data.results);
+            setCurrentPage(1);
+            setPageSize(data.total_pages)
+        }).catch((error) => {
+            if (error.message === '/500' || error.message === '/400' || error.message === '/404') {
+                navigate(error.message)
+            } else {
+                authnAction.logout();
+            }
+        })
     }
 
     useEffect(() => {
-        setCurrentPage(1)
-        if (productType) {
-            const filterProductByCategory = products.filter((product) => {
-                return product.category === productType
-            })
-            const productFilteredByName = searchByName(filterProductByCategory)
-            const sizeOfPage = Math.ceil(productFilteredByName.length / 8)
-            setPageSize(sizeOfPage)
-            setProductFilter(productFilteredByName)
-        } else {
-            const productFilteredByName = searchByName(products)
-            const sizeOfPage = Math.ceil(productFilteredByName.length / 8)
-            setPageSize(sizeOfPage)
-            setProductFilter(productFilteredByName)
-        }
+        getProductsByParams(1, categoryId, name)
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [productType, products, search]);
+    }, [categoryId, name]);
 
     useEffect(() => {
         if (!isAuthn) {
@@ -108,35 +142,20 @@ function ShopPage({ children }) {
         })
     }
 
-    const renderProduct = (product, index) => {
-        return <Link key={`${product._id.$oid}-${index}`}
-            className={`text-black text-decoration-none`}
-            to={`/detail/${product._id.$oid}`}
-        >
-            <Product
-                key={product._id.$oid}
-                id={product._id.$oid}
-                category={product.category}
-                image={product.img1}
-                long_desc={product.long_desc}
-                name={product.name}
-                price={product.price}
-                short_desc={product.short_desc}
-            />
-        </Link>
-    }
-
-    const renderProducts = () => {
-        const productsRender = productFilter.slice(currentPage * 8 - 8, currentPage * 8);
-        if (productType) {
-            return productsRender.map((product, index) => {
-                return renderProduct(product, index)
-            })
-        } else {
-            return productsRender.map((product, index) => {
-                return renderProduct(product, index)
-            })
-        }
+    const renderProducts = (products) => {
+        return products.map((product) => {
+            return <Link to={`/detail/${product._id}`} key={product._id} className="text-decoration-none text-black h-100">
+                <Product
+                    id={product._id}
+                    category={product.category}
+                    image={product.images[0]}
+                    long_desc={product.long_desc}
+                    name={product.name}
+                    price={product.price}
+                    short_desc={product.short_desc}
+                />
+            </Link>
+        })
     }
 
     const previousButtonEvent = () => {
@@ -149,14 +168,6 @@ function ShopPage({ children }) {
         if (currentPage < pageSize) {
             setCurrentPage(currentPage + 1)
         }
-    }
-
-    const renderPageSize = () => {
-        return pageSize > 1 ?
-            `Showing ${1}-${8} of ${productFilter.length} result` :
-            productFilter.length === 0 ?
-                `Showing 0-0 of ${productFilter.length} result` :
-                `Showing 1-${productFilter.length} of ${productFilter.length} result`
     }
 
     return (
@@ -199,25 +210,29 @@ function ShopPage({ children }) {
                                 <option>dssa sorting</option>
                             </select>
                         </div>
-                        <div>
-                            <div className={`${styles['product-list']}  mt-3`}>
-                                {renderProducts()}
-                            </div>
-                        </div>
-                        <div className="w-100 d-flex flex-column align-items-end">
-                            <div className="d-flex">
-                                <button onClick={previousButtonEvent} className={`p-3 ${styles['pre-btn']}`}>
-                                    <FontAwesomeIcon icon={faAngleDoubleLeft} />
-                                </button>
-                                <span className={`bg-dark p-3 ${styles['number-page']}`}>{currentPage}</span>
-                                <button onClick={nextButtonEvent} className={`p-3 ${styles['next-btn']}`}>
-                                    <FontAwesomeIcon icon={faAngleDoubleRight} />
-                                </button>
-                            </div>
-                            <div>
-                                {renderPageSize()}
-                            </div>
-                        </div>
+                        {
+                            isLoadingProducts ? <LoadingSpinner /> : <>
+                                <div>
+                                    <div className={`${styles['product-list']}  mt-3`}>
+                                        {renderProducts(products)}
+                                    </div>
+                                </div>
+                                <div className="w-100 d-flex flex-column align-items-end">
+                                    <div className="d-flex">
+                                        <button onClick={previousButtonEvent} className={`p-3 ${styles['pre-btn']}`}>
+                                            <FontAwesomeIcon icon={faAngleDoubleLeft} />
+                                        </button>
+                                        <span className={`bg-dark p-3 ${styles['number-page']}`}>{currentPage}</span>
+                                        <button onClick={nextButtonEvent} className={`p-3 ${styles['next-btn']}`}>
+                                            <FontAwesomeIcon icon={faAngleDoubleRight} />
+                                        </button>
+                                    </div>
+                                    <div>
+                                        Page {currentPage} of {pageSize}
+                                    </div>
+                                </div>
+                            </>
+                        }
                     </div>
                 </div>
             </div>
