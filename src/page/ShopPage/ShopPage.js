@@ -1,23 +1,53 @@
 import styles from './ShopPage.module.css'
 import Product from "../../components/ProductList/Product/Product";
-import { Link, NavLink, useParams } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { Link, NavLink, useNavigate, useParams } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 import { productTitles } from "../../config/data";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faAngleDoubleLeft, faAngleDoubleRight } from "@fortawesome/free-solid-svg-icons";
 import { useEffect, useState } from "react";
 import BannerOfPage from '../../components/BannerOfPage/BannerOfPage';
+import { checkIsLoginApi } from '../../apis/authn';
+import { cartAction } from '../../store/slice/cart';
+import { authnAction } from '../../store/slice/authn';
 
 function ShopPage({ children }) {
     window.scrollTo(0, 0)
     const products = useSelector(state => state.products.products)
     const { isAuthn } = useSelector(state => state.authn)
+    const navigate = useNavigate();
+    const dispatch = useDispatch();
     const { productType } = useParams()
 
     const [productFilter, setProductFilter] = useState([])
     const [search, setSearch] = useState('')
     const [pageSize, setPageSize] = useState(0)
     const [currentPage, setCurrentPage] = useState(1);
+
+    const checkIsLogin = () => {
+        checkIsLoginApi().then((response) => {
+            if (response.status === 500) {
+                throw new Error('/500');
+            }
+            if (response.status === 400) {
+                throw new Error('/400');
+            }
+            if (response.status === 404) {
+                throw new Error('/404');
+            }
+            if (response.status === 403 || response.status === 401) {
+                throw new Error(response.data.message);
+            }
+            dispatch(authnAction.login(response.data))
+            dispatch(cartAction.setCart(response.data.cart))
+        }).catch((error) => {
+            if (error.message === '/500' || error.message === '/400' || error.message === '/404') {
+                navigate(error.message)
+            } else {
+                authnAction.logout();
+            }
+        })
+    }
 
     const searchByName = (products) => {
         if (search) {
@@ -47,7 +77,14 @@ function ShopPage({ children }) {
             setProductFilter(productFilteredByName)
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [productType, products, search])
+    }, [productType, products, search]);
+
+    useEffect(() => {
+        if (!isAuthn) {
+            checkIsLogin();
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [isAuthn]);
 
     const renderProductTitleName = () => {
         return productTitles.map((productTitle, index) => {
@@ -80,7 +117,7 @@ function ShopPage({ children }) {
                 key={product._id.$oid}
                 id={product._id.$oid}
                 category={product.category}
-                img={product.img1}
+                image={product.img1}
                 long_desc={product.long_desc}
                 name={product.name}
                 price={product.price}

@@ -3,7 +3,7 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { useEffect } from 'react';
 import { PRODUCT_LIST_API } from './config/RestApi';
 import { useDispatch, useSelector } from 'react-redux';
-import { productsAction } from './store/reducer/ProductReducer';
+import { productsAction } from './store/slice/ProductReducer';
 import HomePage from './page/HomePage/HomePage.js';
 import ShopPage from './page/ShopPage/ShopPage.js';
 import DetailPage from './page/DetailPage/DetailPage';

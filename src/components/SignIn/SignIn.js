@@ -1,10 +1,10 @@
 import { Link, useNavigate } from 'react-router-dom';
 import styles from './SignIn.module.css'
 import { useDispatch, useSelector } from 'react-redux';
-import { login } from '../../store/action/AuthenticationAction';
 import { useEffect, useState } from 'react';
 import { signin } from '../../apis/authn';
-import { authnAction } from '../../store/reducer/authn';
+import { authnAction } from '../../store/slice/authn';
+import { cartAction } from '../../store/slice/cart';
 function SignIn() {
     const { isAuthn } = useSelector(state => state.authn)
     const [email, setEmail] = useState('');
@@ -13,12 +13,12 @@ function SignIn() {
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
-    // useEffect(() => {
-    //     if (isAuthn) {
-    //         navigate('/');
-    //     }
-    //     // eslint-disable-next-line react-hooks/exhaustive-deps
-    // }, [isAuthn])
+    useEffect(() => {
+        if (isAuthn) {
+            navigate('/');
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [isAuthn])
 
     const onSubmitLogin = async (e) => {
         try {
@@ -33,6 +33,7 @@ function SignIn() {
             }
             const data = response.data;
             dispatch(authnAction.login(data));
+            dispatch(cartAction.setCart(data.cart))
             navigate('/')
         } catch (error) {
             console.log(error);

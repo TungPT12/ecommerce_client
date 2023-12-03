@@ -6,7 +6,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { checkIsLoginApi } from "../../apis/authn";
-import { authnAction } from "../../store/reducer/authn";
+import { authnAction } from "../../store/slice/authn";
+import { cartAction } from "../../store/slice/cart";
 
 function HomePage({ children }) {
     const navigate = useNavigate();
@@ -27,6 +28,7 @@ function HomePage({ children }) {
                 throw new Error(response.data.message);
             }
             dispatch(authnAction.login(response.data))
+            dispatch(cartAction.setCart(response.data.cart))
         }).catch((error) => {
             if (error.message === '/500' || error.message === '/400' || error.message === '/404') {
                 navigate(error.message)

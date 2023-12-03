@@ -10,6 +10,15 @@ const getTopTrendingProductApi = async () => {
     }
 }
 
+const getProductsApi = async () => {
+    try {
+        const response = await axiosInstance.get(`/products`);
+        return response;
+    } catch (error) {
+        return error.response;
+    }
+}
+
 const getProductByIdApi = async (id) => {
     try {
         const response = await axiosInstance.get(`/product/${id}`);
@@ -31,6 +40,7 @@ const getRelativeProductApi = async (categoryId) => {
 
 export {
     getTopTrendingProductApi,
+    getProductsApi,
     getProductByIdApi,
     getRelativeProductApi,
 }

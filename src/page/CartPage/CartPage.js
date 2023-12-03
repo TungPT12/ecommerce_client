@@ -5,26 +5,27 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCaretLeft, faCaretRight, faGift, faLongArrowAltLeft, faLongArrowAltRight, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { Link, useNavigate } from "react-router-dom";
 import formatPrice from "../../util/FormatPrice";
-import { deleteItemInCart, updateItemInCart } from "../../store/action/CartAction";
-import { authnAction } from "../../store/reducer/authn";
+import { authnAction } from "../../store/slice/authn";
 import { checkIsLoginApi } from "../../apis/authn";
 import { useEffect } from "react";
+import { cartAction } from "../../store/slice/cart";
 // import format
 function CartPage({ children }) {
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const { isAuthn } = useSelector(state => state.authn);
-
+    const cart = useSelector(state => state.cart)
+    // const { items, totalQuantity } = useSelector(state => state.cart)
+    console.log(cart)
     // window.scrollTo(0, 0)
-    const { listCart } = useSelector(state => state.cart);
 
-    const increaseQuantity = (id, actionUpdate) => {
-        dispatch(updateItemInCart(id, actionUpdate))
-    }
+    // const increaseQuantity = (id, actionUpdate) => {
+    //     dispatch(updateItemInCart(id, actionUpdate))
+    // }
 
-    const decreaseQuantity = (id, actionUpdate) => {
-        dispatch(updateItemInCart(id, actionUpdate))
-    }
+    // const decreaseQuantity = (id, actionUpdate) => {
+    //     dispatch(updateItemInCart(id, actionUpdate))
+    // }
 
     const checkIsLogin = () => {
         checkIsLoginApi().then((response) => {
@@ -42,8 +43,8 @@ function CartPage({ children }) {
                 throw new Error(response.data.message);
             }
             dispatch(authnAction.login(response.data))
+            dispatch(cartAction.setCart(response.data.cart))
         }).catch((error) => {
-            console.log(error)
             if (error.message === '/500' || error.message === '/400' || error.message === '/404') {
                 navigate(error.message)
             } else {
@@ -66,7 +67,7 @@ function CartPage({ children }) {
                     <img className="w-100" alt={item.name} src={item.img} />
                 </div>
                 <h5 className="flex-2 text-center font-italic mx-1">{item.name}</h5>
-                <span className={`flex-1 text-center mx-1 ${styles['price']} user-select-none`}>{formatPrice(item.price)} VND</span>
+                <span className={`flex-1 text-center mx-1 ${styles['price']} user-select-none`}>{formatPrice(item.price.toString())} VND</span>
                 <div className="d-flex flex-1 mx-1 justify-content-center">
                     <div className="px-2" onClick={() => {
                         // decreaseQuantity(item.id, "DECREASE")
@@ -121,7 +122,7 @@ function CartPage({ children }) {
                                 <span className="flex-1" >remove</span>
                             </div>
                             <div className="d-flex flex-column row-gap-3 mb-3">
-                                {renderCart(listCart)}
+                                {/* {renderCart(listCart)} */}
                             </div>
                             <div className={`d-flex ps-3 pe-5 py-3 justify-content-between ${styles['shopping-checkout']}`}>
                                 <Link to="/shop" className={`${styles['continue-shopping']} font-italic`}>
@@ -138,11 +139,11 @@ function CartPage({ children }) {
                             <h4 className="w-100 text-uppercase  font-italic opacity-75 mb-4">cart total</h4>
                             <div className={`d-flex font-italic justify-content-between pb-2 ${styles['sub-total']}`}>
                                 <h6 className="text-uppercase mb-0">subtotal</h6>
-                                <span className={`${styles['provisional-bill__sub-price']}`}>{formatPrice(totalPrice(listCart).toString())} VND</span>
+                                <span className={`${styles['provisional-bill__sub-price']}`}>{formatPrice((0).toString())} VND</span>
                             </div>
                             <div className={`d-flex font-italic justify-content-between mt-2 ${styles['total']}`}>
                                 <h6 className="text-uppercase mb-0">total</h6>
-                                <span className={`${styles['provisional-bill__total-price']}`}>{formatPrice(totalPrice(listCart).toString())} VND</span>
+                                {/* <span className={`${styles['provisional-bill__total-price']}`}>{formatPrice(0)} VND</span> */}
                             </div>
                             <div className={`${styles['coupon']} mt-3`}>
                                 <input className="w-100 p-2 " placeholder="Enter your coupon" />

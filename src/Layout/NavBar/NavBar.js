@@ -5,10 +5,9 @@ import styles from './NavBar.module.css'
 import { useSelector } from "react-redux";
 
 function NavBar() {
-    const { isAuthn, cart, fullName } = useSelector(state => state.authn)
-    const totalQuantity = cart.items.reduce((total, item) => {
-        return total + item.quantity;
-    }, 0)
+    const { isAuthn, fullName } = useSelector(state => state.authn)
+    const { totalQuantity } = useSelector(state => state.cart)
+
     return (
         <div className={`container ${styles['navbar']} mb-2 pt-2`}>
             <div className="row">
@@ -37,7 +36,7 @@ function NavBar() {
                             className={`hover-link text-decoration-none font-italic text-black me-3 text-capitalize`}>
                             <FontAwesomeIcon icon={faUser} className="opacity-50 me-1" />{fullName}
                         </NavLink>
-                        <NavLink to="/login" onClick={() => {
+                        <NavLink to="/logout" onClick={() => {
                             // dispatch(logout())
                             // let carts = localStorage.getItem("carts") ? JSON.parse(localStorage.getItem("carts")) : []
                             // const email = userLogin.email;

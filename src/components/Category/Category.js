@@ -23,7 +23,6 @@ function Category() {
             }
             return response.data
         }).then((data) => {
-            console.log(data)
             setIsLoading(false)
             setCategories(data.results)
         }).catch((error) => {
