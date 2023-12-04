@@ -4,16 +4,19 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCaretLeft, faCaretRight } from "@fortawesome/free-solid-svg-icons";
 import { useDispatch, useSelector } from "react-redux";
 import formatPrice from "../../util/FormatPrice";
-import { addToCart } from "../../store/action/CartAction";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { cartAction } from "../../store/slice/cart";
+import { addToCartApi } from "../../apis/cart";
+import { authnAction } from "../../store/slice/authn";
+import { checkIsLoginApi } from "../../apis/authn";
 
 
-function ProductDetail({ name, price, images, short_desc, long_desc, categoryName, onclick }) {
-    const { isLogin } = useSelector(state => state.authentication)
+function ProductDetail({ id, name, price, images, short_desc, long_desc, categoryName }) {
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
+    const { isAuthn, token, cart } = useSelector(state => state.authn);
     const [quantity, setQuantity] = useState(1)
-    const dispatch = useDispatch()
     const [imageShow, setImageShow] = useState('')
-
     const increaseQuantity = () => {
         setQuantity(quantity + 1);
     }
@@ -25,13 +28,76 @@ function ProductDetail({ name, price, images, short_desc, long_desc, categoryNam
 
     const renderImage = (images) => {
         return images.map((image) => {
-            return <div className={`${styles['image']}`} onClick={() => {
+            return <div key={image} className={`${styles['image']}`} onClick={() => {
                 setImageShow(image)
             }}>
                 <img className="w-100" alt={name} src={`${image.includes("http") ? '' : process.env.REACT_APP_API_ENDPOINT_URL_IMAGE}${image}`} />
             </div>
         })
     }
+
+
+    const addToCart = (id, quantity) => {
+        addToCartApi(token, id, quantity).then((response) => {
+            if (response.status === 500) {
+                throw new Error('/500');
+            }
+            if (response.status === 400) {
+                throw new Error('/400');
+            }
+            if (response.status === 404) {
+                throw new Error('/404');
+            }
+            if (response.status === 403 || response.status === 401) {
+                throw new Error('/403');
+            }
+        }).catch((error) => {
+            if (error.message === '/500' || error.message === '/400' || error.message === '/404') {
+                navigate(error.message)
+            } else if (error.message === '/403') {
+                authnAction.logout();
+            } else {
+                cartAction.setCart(cart)
+                alert('Sorry something went wrong!')
+            }
+        })
+        dispatch(cartAction.addToCart({
+            productId: id,
+            quantity: quantity
+        }))
+    }
+
+    const checkIsLogin = () => {
+        checkIsLoginApi().then((response) => {
+            if (response.status === 500) {
+                throw new Error('/500');
+            }
+            if (response.status === 400) {
+                throw new Error('/400');
+            }
+            if (response.status === 404) {
+                throw new Error('/404');
+            }
+            if (response.status === 403 || response.status === 401) {
+                throw new Error('/403');
+            }
+            dispatch(authnAction.login(response.data))
+            dispatch(cartAction.setCart(response.data.cart))
+        }).catch((error) => {
+            if (error.message === '/500' || error.message === '/400' || error.message === '/404') {
+                navigate(error.message)
+            } else {
+                authnAction.logout();
+            }
+        })
+    }
+
+    useEffect(() => {
+        if (!isAuthn) {
+            checkIsLogin();
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [isAuthn]);
 
     useEffect(() => {
         setImageShow(images[0])
@@ -76,24 +142,14 @@ function ProductDetail({ name, price, images, short_desc, long_desc, categoryNam
                                 </div>
                             </div>
                             {
-                                isLogin ? <button className={`${styles['add-to-cart__btn']} font-italic border-0 bg-black px-3 user-select-none`}
+                                isAuthn ? <button className={`${styles['add-to-cart__btn']} font-italic border-0 bg-black px-3 user-select-none`}
                                     onClick={() => {
-                                        // const item = {
-                                        //     // id: productDetail._id.$oid,
-                                        //     // img: productDetail.img1,
-                                        //     // category: productDetail.category,
-                                        //     // name: productDetail.name,
-                                        //     // price: productDetail.price,
-                                        //     // quantity: quantity
-                                        // }
-                                        // dispatch(addToCart(item))
-                                        onclick();
+                                        addToCart(id, quantity)
                                         setQuantity(1);
                                     }
-                                    }
-                                >
+                                    }>
                                     Add to cart
-                                </button> : <Link to="/login" className={`${styles['add-to-cart__btn__not-login']}  d-flex align-items-center text-decoration-none font-italic border-0 bg-black px-3 user-select-none`} >
+                                </button> : <Link to="/signin" className={`${styles['add-to-cart__btn__not-login']}  d-flex align-items-center text-decoration-none font-italic border-0 bg-black px-3 user-select-none`} >
                                     Add to cart
                                 </Link>
                             }

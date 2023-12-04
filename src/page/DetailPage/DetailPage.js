@@ -41,10 +41,6 @@ function DetailPage({ children }) {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [id])
 
-    const addToCart = () => {
-
-    }
-
     return (
         <>
             {children}
@@ -52,6 +48,7 @@ function DetailPage({ children }) {
                 {
                     isLoading ? <LoadingSpinner /> : <>
                         <ProductDetail
+                            id={productDetail._id}
                             images={productDetail.images}
                             name={productDetail.name}
                             price={productDetail.price}
@@ -60,7 +57,6 @@ function DetailPage({ children }) {
                             productDetail={productDetail}
                             categoryName={productDetail.category.name}
                             categoryId={productDetail.category._id}
-                            onclick={addToCart}
                         />
                         <div>
                             {productDetail.category._id ? <RelativeProduct
