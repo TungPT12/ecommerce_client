@@ -23,28 +23,21 @@ const getCartApi = async (token) => {
     }
 }
 
-const getProductByIdApi = async (id) => {
+const deleteProductInCartApi = async (token, productId) => {
     try {
-        const response = await axiosInstance.get(`/product/${id}`);
+        console.log(productId)
+        const response = await axiosInstance.delete(`/cart/${productId}`, setHeaders(token));
         return response;
     } catch (error) {
         return error.response;
     }
 }
 
-
-const getRelativeProductApi = async (categoryId) => {
+const decreaseProductInCartApi = async (token, productId) => {
     try {
-        const response = await axiosInstance.get(`/product-by-category/${categoryId}`);
-        return response;
-    } catch (error) {
-        return error.response;
-    }
-}
-
-const getProductsByParamsApi = async (page, { categoryId, name }) => {
-    try {
-        const response = await axiosInstance.get(`/products?page=${page}&categoryId=${categoryId ? categoryId : ''}&name=${name ? name : ''}`);
+        const response = await axiosInstance.put(`/cart`, {
+            productId: productId
+        }, setHeaders(token));
         return response;
     } catch (error) {
         return error.response;
@@ -54,7 +47,6 @@ const getProductsByParamsApi = async (page, { categoryId, name }) => {
 export {
     addToCartApi,
     getCartApi,
-    getProductByIdApi,
-    getRelativeProductApi,
-    getProductsByParamsApi,
+    deleteProductInCartApi,
+    decreaseProductInCartApi
 }

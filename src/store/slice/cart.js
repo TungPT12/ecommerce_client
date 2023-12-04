@@ -32,6 +32,30 @@ const cartSlice = createSlice({
             }
             state.items = items;
             state.totalQuantity = state.totalQuantity + item.quantity;
+        },
+        deleteProductInCart(state, payload) {
+            const productId = payload.payload;
+            let items = state.items;
+            const position = items.findIndex((item) => {
+                return item.product.toString() === productId;
+            });
+            const quantityItem = items[position].quantity;
+            if (position > -1) {
+                items.splice(position, 1)
+                state.totalQuantity = state.totalQuantity - quantityItem;
+            }
+            // state.items = items;
+        },
+        decreaseProductInCart(state, payload) {
+            const productId = payload.payload;
+            let items = state.items;
+            const position = items.findIndex((item) => {
+                return item.product.toString() === productId;
+            });
+            if (position > -1) {
+                items[position].quantity = items[position].quantity - 1
+                state.totalQuantity = state.totalQuantity - 1;
+            }
         }
     }
 });
