@@ -2,7 +2,6 @@ import styles from './ShopPage.module.css'
 import Product from "../../components/ProductList/Product/Product";
 import { Link, NavLink, useNavigate, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { productTitles } from "../../config/data";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faAngleDoubleLeft, faAngleDoubleRight } from "@fortawesome/free-solid-svg-icons";
 import { useEffect, useState } from "react";
@@ -13,6 +12,7 @@ import { authnAction } from '../../store/slice/authn';
 import { getProductsByParamsApi } from '../../apis/product';
 import LoadingSpinner from '../../components/Loading/LoadingSpinner';
 import { getCategoriesApi } from '../../apis/category';
+import useDebounced from '../../hook/useDebounced';
 
 function ShopPage({ children }) {
     window.scrollTo(0, 0)
@@ -24,11 +24,13 @@ function ShopPage({ children }) {
     const [isLoadingCategories, setIsLoadingCategories] = useState(true);
     const [categoryId, setCategoryId] = useState('')
     const [name, setName] = useState('')
-    const [search, setSearch] = useState('')
+    // const [search, setSearch] = useState('')
     const [pageSize, setPageSize] = useState(0)
     const [currentPage, setCurrentPage] = useState(1);
     const [products, setProducts] = useState([]);
     const [categories, setCategories] = useState([]);
+
+    const debounce = useDebounced(name, 2000)
 
     const checkIsLogin = () => {
         checkIsLoginApi().then((response) => {
@@ -131,11 +133,11 @@ function ShopPage({ children }) {
     }
 
     useEffect(() => {
-        setIsLoadingProducts(true)
-        getProductsByParams(1, categoryId, name)
-        setCurrentPage(1)
+        setIsLoadingProducts(true);
+        getProductsByParams(1, categoryId, name);
+        setCurrentPage(1);
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [categoryId, name]);
+    }, [categoryId, debounce]);
 
     useEffect(() => {
         if (!isAuthn) {
@@ -205,7 +207,6 @@ function ShopPage({ children }) {
         getProductsByParams(currentPage, categoryId, name)
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [currentPage]);
-
     return (
         <>
             {children}
@@ -232,9 +233,9 @@ function ShopPage({ children }) {
                         <div className={`${styles['filter']} d-flex justify-content-between`}>
                             <input placeholder="Enter Search Here!"
                                 className={`${styles['search-input']} px-3 py-2`}
-                                value={search}
+                                value={name}
                                 onChange={(e) => {
-                                    setSearch(e.target.value)
+                                    setName(e.target.value)
                                 }}
                             />
                             <select className="pe-4 h-fit-content" onChange={(e) => {
