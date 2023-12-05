@@ -35,23 +35,6 @@ const isEmptySelect = (input) => {
     return false;
 }
 
-const isValidInputRooms = (input) => {
-    try {
-        if (input) {
-            const roomNumbers = input.split(',').map((number) => {
-                return parseInt(number.trim());
-            })
-            if (roomNumbers.includes(NaN)) {
-                return false;
-            }
-            return true;
-        }
-        return false;
-    } catch (error) {
-        return false;
-    }
-}
-
 const validatedEmail = (input) => {
     let pattern = /^[a-zA-z0-9]+@([a-z]+\.)+[\w-]{2,4}$/;
     if (input.trim()) {
@@ -117,7 +100,6 @@ export {
     isEmptySelect,
     isZeroInput,
     isZeroInputInt,
-    isValidInputRooms,
     validatedEmail,
     validatePhoneNumber,
     validPassword,

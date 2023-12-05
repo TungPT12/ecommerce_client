@@ -23,6 +23,11 @@ function NavBar() {
                 </div>
                 <div className={`${styles['logo']} col text-center text-uppercase`}>boutique</div>
                 <div className="col d-flex justify-content-end">
+                    {/* <NavLink to="/history"
+                        className={`hover-link text-decoration-none font-italic text-black me-3 text-capitalize`}>
+                        <FontAwesomeIcon icon={faCartShopping} className="opacity-50 me-1" />
+                        History
+                    </NavLink> */}
                     <NavLink to="/cart"
                         className={`hover-link text-decoration-none font-italic text-black me-3 text-capitalize`}>
                         <span className="position-relative">
@@ -33,7 +38,7 @@ function NavBar() {
                     </NavLink>
                     {isAuthn ? <>
                         <NavLink
-                            className={`hover-link text-decoration-none font-italic text-black me-3 text-capitalize`}>
+                            className={`hover-link text-decoration-none font-italic text-black me-1 text-capitalize`}>
                             <FontAwesomeIcon icon={faUser} className="opacity-50 me-1" />{fullName}
                         </NavLink>
                         <NavLink to="/logout" onClick={() => {

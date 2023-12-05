@@ -206,3 +206,7 @@ li {
 .active-category {
   color: rgb(224, 177, 90);
 }
+
+.break-word {
+  word-break: break-word;
+}

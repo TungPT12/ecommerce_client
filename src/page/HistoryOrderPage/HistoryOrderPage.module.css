@@ -1,0 +1,20 @@
+.list-item {
+    flex: 3;
+}
+
+.list-item .title {
+    font-size: 1rem;
+    background-color: #eeeeee96;
+    font-weight: 500;
+    color: #626262;
+}
+
+.detail-button,
+.row {
+    font-size: 1.01rem;
+    color: #959595;
+}
+
+.detail-button {
+    border: 2px solid #000;
+}

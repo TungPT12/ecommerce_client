@@ -8,16 +8,10 @@ import { Link, useNavigate } from 'react-router-dom';
 import { signup } from '../../apis/authn';
 
 function SignUp() {
-    // const { isAuthn } = useSelector(state => state.authn)
     const [isDuplicateUserName, setIsDuplicateUserName] = useState(false);
     const [isDuplicateEmail, setIsDuplicateEmail] = useState(false);
     const navigate = useNavigate();
-    // useEffect(() => {
-    //     if (isAuthn) {
-    //         navigate('/');
-    //     }
-    //     // eslint-disable-next-line react-hooks/exhaustive-deps
-    // }, [isAuthn])
+
     const {
         isValid: isValidFullName,
         input: inputFullName,
