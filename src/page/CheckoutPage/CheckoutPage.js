@@ -12,6 +12,8 @@ import LoadingSpinner from "../../components/Loading/LoadingSpinner";
 import { isEmptyInput, isShowWarning, validatePhoneNumber, validatedEmail } from "../../util/input";
 import useInput from "../../hook/use-input";
 import alertMessage from "../../util/warningMessage";
+import { checkoutApi } from "../../apis/order";
+import LoadingSpinnerModal from "../../components/LoadingSpinnerModal/LoadingSpinnerModal";
 
 function CheckoutPage() {
     const navigate = useNavigate();
@@ -92,6 +94,56 @@ function CheckoutPage() {
         })
     }
 
+    const checkout = () => {
+        const formatItems = items.map((item) => {
+            return {
+                product: item.product._id,
+                price: item.product.price,
+                quantity: item.quantity
+            }
+        })
+
+        const order = {
+            fullName: inputFullName,
+            email: inputEmail,
+            phone: inputPhoneNumber,
+            address: inputAddress,
+            totalPrice: totalPrice(items),
+            items: formatItems
+        };
+        console.log(order)
+        checkoutApi(token).then((response) => {
+            if (response.status === 500) {
+                throw new Error('/500');
+            }
+            if (response.status === 400) {
+                throw new Error('/400');
+            }
+            if (response.status === 404) {
+                throw new Error('/404');
+            }
+            if (response.status === 403 || response.status === 401) {
+                throw new Error('/403');
+            }
+            return response.data
+        }).then((data) => {
+            dispatch(cartAction.setCart({
+                items: [],
+                totalQuantity: 0
+            }))
+            setIsLoading(false);
+        }).catch((error) => {
+            if (error.message === '/500' || error.message === '/400' || error.message === '/404') {
+                navigate(error.message)
+            } else if (error.message === '/403') {
+                dispatch(authnAction.logout())
+                navigate('/login')
+            } else {
+                alert('Sorry something went wrong!')
+            }
+        })
+    }
+
     const getCartItems = () => {
         getCartApi(token).then((response) => {
             if (response.status === 500) {
@@ -138,41 +190,11 @@ function CheckoutPage() {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [isAuthn]);
 
-    const onSubmitOrder = (e) => {
-        e.preventDefault();
-        const order = {
-            fullName: inputFullName.trim(),
-            phoneNumber: inputPhoneNumber.trim(),
-            email: inputEmail.trim(),
-            address: inputAddress.trim(),
-            totalPrice: totalPrice(items)
-        }
-        // signup(user).then((response) => {
-        //     if (response.status !== 200) {
-        //         setIsDuplicateEmail(false);
-        //         setIsDuplicateUserName(false);
-        //         if (response.data.message === "Duplicate User Name" || response.data.message === "Duplicate Email") {
-        //             if (response.data.message === "Duplicate User Name") {
-        //                 setIsDuplicateUserName(true)
-        //             } else if (response.data.message === "Duplicate Email") {
-        //                 setIsDuplicateEmail(true)
-        //             }
-        //             throw new Error(response.data.message);
-        //         } else {
-        //             throw new Error(response.data.message);
-        //         }
-        //     }
-        //     alert('Successfully')
-        //     return;
-        // }).then(() => {
-        //     navigate('/login')
-        // }).catch((error) => {
-        //     console.log(error)
-        // })
-    }
-
     return (
         <>
+
+            <LoadingSpinnerModal />
+
             <div className="container pb-3">
                 <BannerOfPage
                     bigTitle="CHECKOUT"
@@ -232,7 +254,7 @@ function CheckoutPage() {
                                             </div>
                                         </div>
                                         <h4 className={`${styles['place-order']} text-light text-center font-weight-300 px-4 py-2 bg-opacity-100 text-opacity-75 bg-dark font-italic w-fit-content`}
-                                            onClick={isValidSubmit ? onSubmitOrder : () => {
+                                            onClick={isValidSubmit ? checkout : () => {
                                                 onTouchedFullName(true);
                                                 onTouchedEmail(true);
                                                 onTouchedAddress(true);

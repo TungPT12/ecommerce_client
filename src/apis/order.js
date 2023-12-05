@@ -1,9 +1,9 @@
-import axiosCustomerInstance from "../configs/axios/customer";
-import setHeaders from "../utils/setHeaders";
+import axiosCustomerInstance from "../config/axiosCustomer";
+import setHeaders from "../util/setHeaders";
 
-const createTransactionApi = async (token, transactionData) => {
+const checkoutApi = async (token, order) => {
     try {
-        const response = await axiosCustomerInstance.post(`/transaction`, transactionData, setHeaders(token));
+        const response = await axiosCustomerInstance.post(`/checkout`, order, setHeaders(token));
         return response;
     } catch (error) {
         return error.response;
@@ -19,6 +19,6 @@ const getTransactionsApi = async (token) => {
     }
 }
 export {
-    createTransactionApi,
+    checkoutApi,
     getTransactionsApi,
 }
