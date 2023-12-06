@@ -15,16 +15,14 @@ import { getCategoriesApi } from '../../apis/category';
 import useDebounced from '../../hook/useDebounced';
 
 function ShopPage({ children }) {
-    window.scrollTo(0, 0)
+    // window.scrollTo(0, 0)
     const { isAuthn } = useSelector(state => state.authn)
     const navigate = useNavigate();
     const dispatch = useDispatch();
-    // const { productType } = 
     const [isLoadingProducts, setIsLoadingProducts] = useState(true);
     const [isLoadingCategories, setIsLoadingCategories] = useState(true);
     const [categoryId, setCategoryId] = useState('')
     const [name, setName] = useState('')
-    // const [search, setSearch] = useState('')
     const [pageSize, setPageSize] = useState(0)
     const [currentPage, setCurrentPage] = useState(1);
     const [products, setProducts] = useState([]);
@@ -133,6 +131,7 @@ function ShopPage({ children }) {
     }
 
     useEffect(() => {
+        window.scrollTo(0, 0)
         setIsLoadingProducts(true);
         getProductsByParams(1, categoryId, name);
         setCurrentPage(1);
@@ -203,6 +202,7 @@ function ShopPage({ children }) {
     }
 
     useEffect(() => {
+        window.scrollTo(0, 0)
         setIsLoadingProducts(true)
         getProductsByParams(currentPage, categoryId, name)
         // eslint-disable-next-line react-hooks/exhaustive-deps

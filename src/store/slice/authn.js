@@ -24,9 +24,6 @@ const authnSlice = createSlice({
         },
         logout(state) {
             state.isAuthn = false;
-            // state.cart = {
-            //     items: []
-            // }
         },
 
         setUser(state, payload) {

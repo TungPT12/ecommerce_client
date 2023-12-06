@@ -89,6 +89,10 @@ function CheckoutPage() {
             if (error.message === '/500' || error.message === '/400' || error.message === '/404') {
                 navigate(error.message)
             } else {
+                dispatch(cartAction.setCart({
+                    items: [],
+                    totalQuantity: 0
+                }))
                 dispatch(authnAction.logout())
                 navigate('/login')
             }
@@ -138,6 +142,10 @@ function CheckoutPage() {
             if (error.message === '/500' || error.message === '/400' || error.message === '/404') {
                 navigate(error.message)
             } else if (error.message === '/403') {
+                dispatch(cartAction.setCart({
+                    items: [],
+                    totalQuantity: 0
+                }))
                 dispatch(authnAction.logout())
                 navigate('/login')
             } else {
@@ -168,6 +176,10 @@ function CheckoutPage() {
             if (error.message === '/500' || error.message === '/400' || error.message === '/404') {
                 navigate(error.message)
             } else if (error.message === '/403') {
+                dispatch(cartAction.setCart({
+                    items: [],
+                    totalQuantity: 0
+                }))
                 dispatch(authnAction.logout())
                 navigate('/login')
             } else {

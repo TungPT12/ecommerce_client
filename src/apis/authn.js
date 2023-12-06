@@ -2,7 +2,7 @@ import axiosCustomerInstance from "../config/axiosCustomer";
 
 const signin = async (email, password) => {
     try {
-        const response = await axiosCustomerInstance.post('/login', {
+        const response = await axiosCustomerInstance.post('/signin', {
             email: email,
             password: password
         });
@@ -30,8 +30,18 @@ const checkIsLoginApi = async () => {
     }
 }
 
+const logout = async () => {
+    try {
+        const response = await axiosCustomerInstance.post('/logout');
+        return response
+    } catch (error) {
+        return error.response;
+    }
+}
+
 export {
     signin,
     checkIsLoginApi,
-    signup
+    signup,
+    logout
 }

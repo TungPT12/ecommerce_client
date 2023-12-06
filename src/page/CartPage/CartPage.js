@@ -11,8 +11,8 @@ import { useEffect, useState } from "react";
 import { cartAction } from "../../store/slice/cart";
 import { addToCartApi, decreaseProductInCartApi, deleteProductInCartApi, getCartApi } from "../../apis/cart";
 import LoadingSpinner from "../../components/Loading/LoadingSpinner";
-// import format
-function CartPage({ children }) {
+
+function CartPage() {
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const { isAuthn, token } = useSelector(state => state.authn);
@@ -21,7 +21,6 @@ function CartPage({ children }) {
         items: [],
         totalQuantity: 0
     })
-    // window.scrollTo(0, 0)
 
     const increaseQuantity = (productId) => {
         let newCart = cart;
@@ -57,6 +56,10 @@ function CartPage({ children }) {
                 if (error.message === '/500' || error.message === '/400' || error.message === '/404') {
                     navigate(error.message)
                 } else if (error.message === '/403') {
+                    dispatch(cartAction.setCart({
+                        items: [],
+                        totalQuantity: 0
+                    }))
                     dispatch(authnAction.logout())
                     navigate('/login')
                 } else {
@@ -95,12 +98,18 @@ function CartPage({ children }) {
             if (response.status === 403 || response.status === 401) {
                 throw new Error(response.data.message);
             }
-            dispatch(authnAction.login(response.data))
-            dispatch(cartAction.setCart(response.data.cart))
+            return response.data;
+        }).then((data) => {
+            dispatch(authnAction.login(data))
+            dispatch(cartAction.setCart(data.cart))
         }).catch((error) => {
             if (error.message === '/500' || error.message === '/400' || error.message === '/404') {
                 navigate(error.message)
             } else {
+                dispatch(cartAction.setCart({
+                    items: [],
+                    totalQuantity: 0
+                }))
                 dispatch(authnAction.logout())
                 navigate('/login')
             }
@@ -146,6 +155,10 @@ function CartPage({ children }) {
             if (error.message === '/500' || error.message === '/400' || error.message === '/404') {
                 navigate(error.message)
             } else if (error.message === '/403') {
+                dispatch(cartAction.setCart({
+                    items: [],
+                    totalQuantity: 0
+                }))
                 dispatch(authnAction.logout())
                 navigate('/login')
             } else {
@@ -173,7 +186,12 @@ function CartPage({ children }) {
             if (error.message === '/500' || error.message === '/400' || error.message === '/404') {
                 navigate(error.message)
             } else if (error.message === '/403') {
-                authnAction.logout();
+                dispatch(setCart({
+                    items: [],
+                    totalQuantity: 0
+                }))
+                dispatch(authnAction.logout())
+                navigate('/login')
             } else {
                 cartAction.setCart(cart)
                 alert('Sorry something went wrong!')
@@ -207,6 +225,10 @@ function CartPage({ children }) {
             if (error.message === '/500' || error.message === '/400' || error.message === '/404') {
                 navigate(error.message)
             } else if (error.message === '/403') {
+                dispatch(cartAction.setCart({
+                    items: [],
+                    totalQuantity: 0
+                }))
                 dispatch(authnAction.logout())
                 navigate('/login')
             } else {
@@ -218,6 +240,8 @@ function CartPage({ children }) {
 
     useEffect(() => {
         if (!isAuthn) {
+            console.log("addddddasd")
+
             checkIsLogin();
         } else {
             getCart();
