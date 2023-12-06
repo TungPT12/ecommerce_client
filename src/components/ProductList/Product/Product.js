@@ -27,7 +27,7 @@ function Product({ isHavePopup, id, image, name, price, short_desc }) {
                         alt={name} />
                 </div>
                 <p className={`name text-center font-italic font-weight-900 font-family-Ubuntu mb-1`}>{name}</p>
-                <p className={`price text-center opacity-50 font-weight-light font-monospace`}>{formatPrice(price)} VND</p>
+                <p className={`price text-center opacity-50 font-weight-light font-monospace`}>{formatPrice(price.toString())} VND</p>
             </div>
             {
                 isHavePopup ? <>

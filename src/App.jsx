@@ -11,7 +11,7 @@ import Footer from './Layout/Footer/Footer';
 import NavBar from './Layout/NavBar/NavBar';
 import NotFoundPage from './page/NotFoundPage/NotFoundPage';
 import Chat from './components/Chat/Chat';
-import HistoryOrderPage from './page/HistoryOrderPage/HistoryOrderPage.js';
+import OrderPage from './page/OrderPage/OrderPage.js';
 
 function App() {
   return (
@@ -23,7 +23,7 @@ function App() {
         <Route path='/' element=<HomePage /> />
         <Route path='/shop' element=<ShopPage /> />
         <Route path='/detail/:id' element=<DetailPage /> />
-        <Route path='/history' element=<HistoryOrderPage /> />
+        <Route path='/order' element=<OrderPage /> />
         <Route path='/cart' element=<CartPage /> />
         <Route path='/checkout' element=<CheckoutPage /> />
         <Route path='/login' element=<SigninPage /> />

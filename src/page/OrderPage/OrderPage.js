@@ -1,6 +1,6 @@
 import { useDispatch, useSelector } from "react-redux";
 import BannerOfPage from "../../components/BannerOfPage/BannerOfPage";
-import styles from './HistoryOrderPage.module.css'
+import styles from './OrderPage.module.css'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCaretLeft, faCaretRight, faLongArrowAltRight, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { Link, useNavigate } from "react-router-dom";
@@ -11,7 +11,7 @@ import { useEffect, useState } from "react";
 import { cartAction } from "../../store/slice/cart";
 import { addToCartApi, decreaseProductInCartApi, deleteProductInCartApi, getCartApi } from "../../apis/cart";
 import LoadingSpinner from "../../components/Loading/LoadingSpinner";
-// import format
+
 function HistoryOrderPage() {
     const navigate = useNavigate();
     const dispatch = useDispatch();
@@ -21,7 +21,7 @@ function HistoryOrderPage() {
         items: [],
         totalQuantity: 0
     })
-    // window.scrollTo(0, 0)
+    window.scrollTo(0, 0)
 
     const increaseQuantity = (productId) => {
         let newCart = cart;

@@ -25,7 +25,7 @@ function HomePage({ children }) {
                 throw new Error('/404');
             }
             if (response.status === 403 || response.status === 401) {
-                throw new Error(response.data.message);
+                throw new Error('');
             }
             dispatch(authnAction.login(response.data))
             dispatch(cartAction.setCart(response.data.cart))

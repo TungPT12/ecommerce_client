@@ -2,9 +2,9 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initAuthn = {
     isAuthn: false,
-    cart: {
-        items: []
-    }
+    // cart: {
+    //     items: []
+    // }
 }
 
 const authnSlice = createSlice({
@@ -20,13 +20,13 @@ const authnSlice = createSlice({
             state.fullName = user.fullName;
             state.phoneNumber = user.phoneNumber;
             state.avatar = user.avatar;
-            state.cart = user.cart
+            // state.cart = user.cart
         },
         logout(state) {
             state.isAuthn = false;
-            state.cart = {
-                items: []
-            }
+            // state.cart = {
+            //     items: []
+            // }
         },
 
         setUser(state, payload) {
@@ -38,7 +38,7 @@ const authnSlice = createSlice({
             state.fullName = user.fullName;
             state.phoneNumber = user.phoneNumber;
             state.avatar = user.avatar;
-            state.cart = user.cart
+            // state.cart = user.cart
         }
     }
 })

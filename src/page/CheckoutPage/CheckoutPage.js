@@ -21,6 +21,7 @@ function CheckoutPage() {
     const dispatch = useDispatch();
     const [items, setItems] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
+    const [isLoadingModal, setIsLoadingModal] = useState(false);
 
     const {
         isValid: isValidFullName,
@@ -95,6 +96,7 @@ function CheckoutPage() {
     }
 
     const checkout = () => {
+        setIsLoadingModal(true);
         const formatItems = items.map((item) => {
             return {
                 product: item.product._id,
@@ -104,15 +106,14 @@ function CheckoutPage() {
         })
 
         const order = {
-            fullName: inputFullName,
+            name: inputFullName,
             email: inputEmail,
             phone: inputPhoneNumber,
             address: inputAddress,
             totalPrice: totalPrice(items),
-            items: formatItems
+            items: items
         };
-        console.log(order)
-        checkoutApi(token).then((response) => {
+        checkoutApi(token, order).then((response) => {
             if (response.status === 500) {
                 throw new Error('/500');
             }
@@ -131,7 +132,8 @@ function CheckoutPage() {
                 items: [],
                 totalQuantity: 0
             }))
-            setIsLoading(false);
+            setIsLoadingModal(false);
+            navigate('/order')
         }).catch((error) => {
             if (error.message === '/500' || error.message === '/400' || error.message === '/404') {
                 navigate(error.message)
@@ -180,12 +182,9 @@ function CheckoutPage() {
             checkIsLogin();
         } else {
             getCartItems();
-            // onTouchedAddress(true)
             setInputFullName(fullName);
             setInputEmail(email);
-            // onTouchedEmail(true);
             setInputPhoneNumber(phoneNumber);
-            // onTouchedPhoneNumber(true);
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [isAuthn]);
@@ -193,8 +192,9 @@ function CheckoutPage() {
     return (
         <>
 
-            <LoadingSpinnerModal />
-
+            {
+                isLoadingModal ? <LoadingSpinnerModal /> : <></>
+            }
             <div className="container pb-3">
                 <BannerOfPage
                     bigTitle="CHECKOUT"

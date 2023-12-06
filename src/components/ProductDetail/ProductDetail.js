@@ -117,7 +117,7 @@ function ProductDetail({ id, name, price, images, short_desc, long_desc, categor
                 <div className="col">
                     <div className="row">
                         <h2 className="font-italic">{name}</h2>
-                        <p className={`${styles['price']} opacity-50 font-italic font-family-Ubuntu`}>{formatPrice(price)}</p>
+                        <p className={`${styles['price']} opacity-50 font-italic font-family-Ubuntu`}>{formatPrice(price.toString())}</p>
                         <p className="opacity-50 font-italic">{short_desc}</p>
                     </div>
                     <div className="row">
