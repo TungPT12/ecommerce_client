@@ -10,9 +10,9 @@ const checkoutApi = async (token, order) => {
     }
 }
 
-const getTransactionsApi = async (token) => {
+const getOrdersApi = async (token) => {
     try {
-        const response = await axiosCustomerInstance.get(`/transactions`, setHeaders(token));
+        const response = await axiosCustomerInstance.get(`/orders`, setHeaders(token));
         return response;
     } catch (error) {
         return error.response;
@@ -20,5 +20,5 @@ const getTransactionsApi = async (token) => {
 }
 export {
     checkoutApi,
-    getTransactionsApi,
+    getOrdersApi,
 }
