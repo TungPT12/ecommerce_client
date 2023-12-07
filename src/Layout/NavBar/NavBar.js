@@ -47,61 +47,6 @@ function NavBar() {
                             <NavLink
                                 className={`d-flex text-decoration-none font-italic position-relative text-black align-items-baseline text-capitalize`}>
                                 <FontAwesomeIcon icon={faUser} className="opacity-50 me-1 justify-content-center " />{fullName}
-                                {/* <div className={`${styles['show-popup-icon']}  show-popup`}>
-                                    <FontAwesomeIcon icon={faSortDesc} className={`ms-1 d-flex ${styles['icon-show-popup']}`} />
-                                    <div className={`${styles['navbar-popup']} popup-navbar p-2 w-100 position-absolute`}>
-                                        <NavLink to="/order" className={`${styles['order']} d-flex align-items-center py-1 text-decoration-none`}>
-                                            <div className="d-block me-1">
-                                                <FontAwesomeIcon icon={faCoins} />
-                                            </div>
-                                            Order
-                                        </NavLink>
-                                        <NavLink onClick={() => {
-                                            setIsLoadingSpinnerModal(true);
-                                            logout().then((response) => {
-                                                if (response.status === 500) {
-                                                    throw new Error('/500');
-                                                }
-                                                if (response.status === 400) {
-                                                    throw new Error('/400');
-                                                }
-                                                if (response.status === 404) {
-                                                    throw new Error('/404');
-                                                }
-                                                if (response.status === 403 || response.status === 401) {
-                                                    throw new Error('/403');
-                                                }
-                                            }).then(() => {
-                                                dispatch(cartAction.setCart({
-                                                    items: [],
-                                                    totalQuantity: 0
-                                                }));
-                                                dispatch(authnAction.logout());
-                                                setIsLoadingSpinnerModal(false);
-                                                navigate('/login')
-                                            }).catch((error) => {
-                                                if (error.message === '/500' || error.message === '/400' || error.message === '/404') {
-                                                    navigate(error.message)
-                                                } else if (error.message === '/403') {
-                                                    setIsLoadingSpinnerModal(false);
-                                                    dispatch(cartAction.setCart({
-                                                        items: [],
-                                                        totalQuantity: 0
-                                                    }))
-                                                    dispatch(authnAction.logout())
-                                                    setIsLoadingSpinnerModal(false);
-                                                    navigate('/login');
-                                                }
-                                            });
-                                        }} className={`text-decoration-none w-100 d-flex align-items-center py-1 ${styles['logout']}`}>
-                                            <div className="d-block">
-                                                <FontAwesomeIcon icon={faArrowRightToBracket} />
-                                            </div>
-                                            <div className="ps-1">(Logout)</div>
-                                        </NavLink>
-                                    </div>
-                                </div> */}
-
                             </NavLink>
                             <Tippy render={(attrs) => (
                                 <div {...attrs} tabIndex="-1" className={`${styles['navbar-popup']} popup-navbar p-2`}>
@@ -161,46 +106,6 @@ function NavBar() {
 
                                 </div>
                             </Tippy>
-                            {/* <NavLink onClick={() => {
-                                setIsLoadingSpinnerModal(true);
-                                logout().then((response) => {
-                                    if (response.status === 500) {
-                                        throw new Error('/500');
-                                    }
-                                    if (response.status === 400) {
-                                        throw new Error('/400');
-                                    }
-                                    if (response.status === 404) {
-                                        throw new Error('/404');
-                                    }
-                                    if (response.status === 403 || response.status === 401) {
-                                        throw new Error('/403');
-                                    }
-                                }).then(() => {
-                                    dispatch(cartAction.setCart({
-                                        items: [],
-                                        totalQuantity: 0
-                                    }));
-                                    dispatch(authnAction.logout());
-                                    setIsLoadingSpinnerModal(false);
-                                    navigate('/login')
-                                }).catch((error) => {
-                                    if (error.message === '/500' || error.message === '/400' || error.message === '/404') {
-                                        navigate(error.message)
-                                    } else if (error.message === '/403') {
-                                        setIsLoadingSpinnerModal(false);
-                                        dispatch(cartAction.setCart({
-                                            items: [],
-                                            totalQuantity: 0
-                                        }))
-                                        dispatch(authnAction.logout())
-                                        setIsLoadingSpinnerModal(false);
-                                        navigate('/login');
-                                    }
-                                });
-                            }} className="hover-link text-decoration-none me-3 text-black font-italic">
-                                (Logout)
-                            </NavLink> */}
                         </> : <></>}
                         {isAuthn ?
                             <></> :
