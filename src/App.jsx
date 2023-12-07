@@ -12,6 +12,7 @@ import NavBar from './Layout/NavBar/NavBar';
 import NotFoundPage from './page/NotFoundPage/NotFoundPage';
 import Chat from './components/Chat/Chat';
 import OrderPage from './page/OrderPage/OrderPage.js';
+import OrderDetail from './page/OrderPage/OrderDetail/OrderDetail.js';
 
 function App() {
   return (
@@ -28,6 +29,7 @@ function App() {
         <Route path='/checkout' element=<CheckoutPage /> />
         <Route path='/login' element=<SigninPage /> />
         <Route path='/signup' element=<SignupPage /> />
+        <Route path='/order/:id' element=<OrderDetail /> />
         {/* <Route path='/cart' element={isLogin ? <CartPage /> : <SigninPage />} />
         <Route path='/checkout' element={isLogin ? <CheckoutPage /> : <SigninPage />} />
         <Route path='/login' element={isLogin ? <HomePage /> : <SigninPage />} />

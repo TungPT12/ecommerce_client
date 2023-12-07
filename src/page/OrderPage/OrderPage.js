@@ -118,7 +118,7 @@ function HistoryOrderPage() {
                     {order.status}
                 </div>
                 <div className={`my-1 flex-2 mx-1 text-center`} >
-                    <Link className={`px-1 py-1  text-decoration-none ${styles['detail-button']}`}>
+                    <Link to={`/order/${order._id}`} className={`px-1 py-1  text-decoration-none ${styles['detail-button']}`}>
                         View
                         <FontAwesomeIcon icon={faLongArrowAltRight} className="ms-3 text-black" />
                     </Link>
