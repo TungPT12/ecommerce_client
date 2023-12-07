@@ -43,7 +43,7 @@ function Product({ isHavePopup, id, image, name, price, short_desc }) {
                                     </div>
                                     <div className='pe-2'>
                                         <h3 className={`name font-italic font-weight-900 font-family-Ubuntu mb-1`}>{name}</h3>
-                                        <p className={`price font-weight-light font-monospace m-0 ${styles['popup-price']}`}>{formatPrice(price)}</p>
+                                        <p className={`price font-weight-light font-monospace m-0 ${styles['popup-price']}`}>{formatPrice(price.toString())}</p>
                                         <p className={`${styles['short-desc']}`}>{short_desc}</p>
                                     </div>
                                     <Link to={`/detail/${id}`} className={`${styles['view-detail-btn']} text-decoration-none py-2 px-3 font-italic bg-black w-fit-content`}>
