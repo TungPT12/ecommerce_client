@@ -111,10 +111,11 @@ function HistoryOrderPage() {
                 <span className={`flex-2 mx-1 my-1 text-center`}>{order.address}</span>
                 <span className={`flex-2 text-center my-1 mx-1`}>{formatPrice(order.totalPrice.toString())} VND</span>
                 <div className={`my-1 flex-2 mx-1 text-center`} >
-                    {order.delivery}
+                    {order.delivery.toLowerCase() === 'waiting' ? 'Waiting for progress'
+                        : order.delivery.toLowerCase() === 'delivering' ? 'Delivering' : 'Delivered'}
                 </div>
                 <div className={`my-1 flex-2 mx-1 text-center`} >
-                    {order.status}
+                    {order.status ? "Already paid" : "Waiting for pay"}
                 </div>
                 <div className={`my-1 flex-2 mx-1 text-center`} >
                     <Link to={`/order/${order._id}`} className={`px-1 py-1  text-decoration-none ${styles['detail-button']}`}>
