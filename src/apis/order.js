@@ -18,7 +18,17 @@ const getOrdersApi = async (token) => {
         return error.response;
     }
 }
+
+const getOrderDetailApi = async (token, id) => {
+    try {
+        const response = await axiosCustomerInstance.get(`/order/${id}`, setHeaders(token));
+        return response;
+    } catch (error) {
+        return error.response;
+    }
+}
 export {
     checkoutApi,
     getOrdersApi,
+    getOrderDetailApi,
 }

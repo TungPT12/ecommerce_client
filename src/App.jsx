@@ -30,10 +30,6 @@ function App() {
         <Route path='/login' element=<SigninPage /> />
         <Route path='/signup' element=<SignupPage /> />
         <Route path='/order/:id' element=<OrderDetail /> />
-        {/* <Route path='/cart' element={isLogin ? <CartPage /> : <SigninPage />} />
-        <Route path='/checkout' element={isLogin ? <CheckoutPage /> : <SigninPage />} />
-        <Route path='/login' element={isLogin ? <HomePage /> : <SigninPage />} />
-        <Route path='/signup' element={isLogin ? <HomePage /> : <SignupPage />} /> */}
       </Routes>
       <Footer />
     </BrowserRouter>

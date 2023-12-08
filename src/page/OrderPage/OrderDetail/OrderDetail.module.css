@@ -1,0 +1,19 @@
+.info-user p {
+    margin: 0;
+    color: #aaa;
+    font-style: italic;
+    margin-bottom: 0.5rem;
+}
+
+.table {
+    margin-top: 6rem;
+}
+
+.list-item .title {
+    background-color: #eeeeee96;
+}
+
+.wrapper-order-detail-page {
+    font-family: sans-serif;
+    margin-top: 1rem;
+}

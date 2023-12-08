@@ -238,13 +238,13 @@ function ShopPage({ children }) {
                                     setName(e.target.value)
                                 }}
                             />
-                            <select className="pe-4 h-fit-content" onChange={(e) => {
+                            {/* <select className="pe-4 h-fit-content" onChange={(e) => {
                                 console.log(e.target.value)
                             }}>
                                 <option>Default sorting</option>
                                 <option>Des sorting</option>
                                 <option>dssa sorting</option>
-                            </select>
+                            </select> */}
                         </div>
                         {
                             isLoadingProducts ? <LoadingSpinner /> : <>

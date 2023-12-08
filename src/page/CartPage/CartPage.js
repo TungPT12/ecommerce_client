@@ -240,8 +240,6 @@ function CartPage() {
 
     useEffect(() => {
         if (!isAuthn) {
-            console.log("addddddasd")
-
             checkIsLogin();
         } else {
             getCart();

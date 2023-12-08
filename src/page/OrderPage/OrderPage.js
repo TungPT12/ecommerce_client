@@ -65,7 +65,6 @@ function HistoryOrderPage() {
             }
             return response.data
         }).then((data) => {
-            console.log(data.results)
             setOrders(data.results)
             setIsLoading(false);
         }).catch((error) => {
