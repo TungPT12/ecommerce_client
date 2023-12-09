@@ -16,6 +16,7 @@ function CartPage() {
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const { isAuthn, token } = useSelector(state => state.authn);
+    console.log(isAuthn)
     const [isLoading, setIsLoading] = useState(true)
     const [cart, setCart] = useState({
         items: [],
