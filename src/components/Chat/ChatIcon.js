@@ -1,13 +1,11 @@
 import facebookMessengerIcon from '../../assets/icon/facebook-messenger.svg'
 import styles from './ChatIcon.module.css'
 import ReactDOM from "react-dom";
-function ChatIcon({ setShowChat, showChat }) {
+function ChatIcon({ createRoomChatFn }) {
 
     const renderChatLive = () => {
         return <>
-            <div className={`${styles['facebook-messenger-icon']}`} onClick={() => {
-                setShowChat(!showChat)
-            }}>
+            <div className={`${styles['facebook-messenger-icon']}`} onClick={createRoomChatFn}>
                 <img className='w-100' alt='icon' src={facebookMessengerIcon} />
             </div>
         </>

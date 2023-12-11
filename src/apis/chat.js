@@ -1,4 +1,3 @@
-import axiosInstance from "../config/axios";
 import axiosCustomerInstance from "../config/axiosCustomer";
 
 const sendMessageApi = async (message, roomId) => {
@@ -14,7 +13,20 @@ const sendMessageApi = async (message, roomId) => {
     }
 }
 
+const createRoomChatApi = async (userId) => {
+    try {
+        console.log(userId)
+        const response = await axiosCustomerInstance.post('/createRoomChat', {
+            userId: userId,
+        });
+        return response
+    } catch (error) {
+        return error.response;
+    }
+}
+
 
 export {
     sendMessageApi,
+    createRoomChatApi,
 }

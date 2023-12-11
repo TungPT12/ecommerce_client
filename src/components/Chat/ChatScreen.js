@@ -7,18 +7,11 @@ import { useEffect, useRef, useState } from 'react';
 import { io } from "socket.io-client";
 import { sendMessageApi } from '../../apis/chat';
 
-function ChatScreen({ showChat }) {
+function ChatScreen({ roomId }) {
     const socket = io('http://localhost:5000');
     const [messages, setMessages] = useState([]);
-    // const [message, setMessage] = useState('');
-    const [room, setRoom] = useState('');
+    const [room, setRoom] = useState(roomId);
     const inputElement = useRef();
-
-
-    useEffect(() => {
-        setRoom('12345')
-    }, [])
-
 
     useEffect(() => {
         socket.on(room, message => {
@@ -32,9 +25,7 @@ function ChatScreen({ showChat }) {
     }, [messages])
 
     const sendMessage = () => {
-        console.log(inputElement)
         const message = inputElement.current.innerHTML;
-        // console.log(message)
         sendMessageApi(message, room).then((response) => {
             console.log(response.data)
         }).catch((error) => {
@@ -70,7 +61,7 @@ function ChatScreen({ showChat }) {
 
     const renderChatLiveScreen = () => {
         return <>
-            <div className={`${styles['chat-live']} bg-light  ${showChat ? "d-block" : "d-none"}`}>
+            <div className={`${styles['chat-live']} bg-light `}>
                 <div className='d-flex justify-content-between px-2 py-3'>
                     <h5 className='text-capitalize font-weight-500'>customer support</h5>
                     <div className={`${styles['title']} text-center d-flex align-items-center p-1 font-italic`}>
