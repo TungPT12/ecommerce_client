@@ -1,8 +1,8 @@
-import axiosInstance from "../config/axios";
+import axiosCustomerInstance from "../config/axiosCustomer";
 
 const getCategoriesApi = async (token) => {
     try {
-        const response = await axiosInstance.get(`/categories`);
+        const response = await axiosCustomerInstance.get(`/categories`);
         return response;
     } catch (error) {
         return error.response;
@@ -11,7 +11,7 @@ const getCategoriesApi = async (token) => {
 
 const getNumberHotelInRandomAreaApi = async () => {
     try {
-        const response = await axiosInstance.get(`/area/three-random/count-hotel`);
+        const response = await axiosCustomerInstance.get(`/area/three-random/count-hotel`);
         return response;
     } catch (error) {
         return error.response;

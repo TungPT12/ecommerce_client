@@ -1,9 +1,8 @@
-import axios from 'axios';
-import axiosInstance from '../configs/axios/axios';
+import axiosCustomerInstance from '../config/axiosCustomer';
 
 const uploadImageApi = async (formData) => {
     try {
-        const response = axiosInstance.post('/upload', formData, {
+        const response = axiosCustomerInstance.post('/upload', formData, {
             headers: {
                 "Content-Type": "multipart/form-data",
             }

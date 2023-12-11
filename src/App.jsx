@@ -13,11 +13,13 @@ import NotFoundPage from './page/NotFoundPage/NotFoundPage';
 import Chat from './components/Chat/Chat';
 import OrderPage from './page/OrderPage/OrderPage.js';
 import OrderDetail from './page/OrderPage/OrderDetail/OrderDetail.js';
+import { useSelector } from 'react-redux';
 
 function App() {
+  const { isAuthn } = useSelector(state => state.authn)
   return (
     <BrowserRouter>
-      <Chat />
+      {isAuthn ? <Chat /> : <></>}
       <NavBar />
       <Routes>
         <Route path='/*' element=<NotFoundPage /> />

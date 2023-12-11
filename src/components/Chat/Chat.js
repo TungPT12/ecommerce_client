@@ -1,25 +1,27 @@
 import { useEffect, useState } from "react";
 import ChatIcon from "./ChatIcon";
 import ChatScreen from "./ChatScreen";
-import { io } from "socket.io-client";
+import { useSelector } from "react-redux";
 function Chat() {
-    const socket = io('http://localhost:5000');
+    const { isAuthn, token, id } = useSelector(state => state.authn);
+
     const [showChat, setShowChat] = useState(false)
-    const [messages, setMessages] = useState([])
+    const [roomId, setRoomId] = useState('');
+    // const [messages, setMessages] = useState([])
 
-    useEffect(() => {
-        socket.on('roomId', (data) => {
-            setMessages([...messages, data])
-        })
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [socket])
-
-    console.log(messages)
+    // useEffect(() => {
+    //     socket.on('roomId', (data) => {
+    //         setMessages([...messages, data])
+    //     })
+    //     // eslint-disable-next-line react-hooks/exhaustive-deps
+    // }, [socket])
 
     return (
         <>
             <ChatIcon setShowChat={setShowChat} showChat={showChat} />
-            <ChatScreen showChat={showChat} />
+            <div>
+                <ChatScreen roomId={roomId} showChat={showChat} />
+            </div>
         </>
     );
 }

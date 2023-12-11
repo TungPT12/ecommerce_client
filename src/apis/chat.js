@@ -1,11 +1,12 @@
-import axiosInstance from "../configs/axios/axios";
+import axiosInstance from "../config/axios";
+import axiosCustomerInstance from "../config/axiosCustomer";
 
-const sendMessage = async (message, roomId, userId) => {
+const sendMessageApi = async (message, roomId) => {
     try {
-        const response = await axiosInstance.post('/sendMessage', {
+        const response = await axiosCustomerInstance.post('/sendMessage', {
             message: message,
+            isClient: true,
             roomId: roomId,
-            userId: userId,
         });
         return response
     } catch (error) {
@@ -15,5 +16,5 @@ const sendMessage = async (message, roomId, userId) => {
 
 
 export {
-    sendMessage,
+    sendMessageApi,
 }
