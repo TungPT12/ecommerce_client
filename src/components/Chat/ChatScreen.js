@@ -5,29 +5,42 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faLink, faSmile, faPaperPlane } from '@fortawesome/free-solid-svg-icons';
 import { useEffect, useRef, useState } from 'react';
 import { io } from "socket.io-client";
-import { sendMessageApi } from '../../apis/chat';
+import { useSelector } from "react-redux";
+import { getRoomChatByUserIdApi, sendMessageApi } from '../../apis/chat';
+import LoadingSpinner from '../Loading/LoadingSpinner';
 
 function ChatScreen({ roomId }) {
     const socket = io('http://localhost:5000');
+    const { id } = useSelector(state => state.authn);
     const [messages, setMessages] = useState([]);
-    const [room, setRoom] = useState(roomId);
+    const [room] = useState(roomId);
     const inputElement = useRef();
+    const [isLoading, setIsLoading] = useState(true)
 
     useEffect(() => {
         socket.on(room, message => {
             setMessages([...messages, message]);
         })
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [socket, room])
+    }, [socket, room]);
 
     useEffect(() => {
-        console.log(messages)
-    }, [messages])
+        if (roomId) {
+            getRoomChatByUserIdApi(id, roomId).then((response) => {
+                setMessages(response.data.messages);
+                setIsLoading(false);
+            }).catch((error) => {
+                setIsLoading(false);
+                console.log(error)
+            })
+        }
+    }, [])
 
     const sendMessage = () => {
         const message = inputElement.current.innerHTML;
         sendMessageApi(message, room).then((response) => {
             console.log(response.data)
+            inputElement.current.innerHTML = ""
         }).catch((error) => {
             console.log(error)
         })
@@ -68,14 +81,18 @@ function ChatScreen({ roomId }) {
                         <span className='text-capitalize text-black-50'>let's chat app</span>
                     </div>
                 </div>
-                <div className={`${styles['chat-message-content']} col ps-2`}>
-                    {renderMessages(messages)}
+                <div className={`${styles['chat-message-content']}  ${isLoading ? 'd-flex align-items-center justify-content-center' : ""} col ps-2`}>
+                    {
+                        isLoading ? <div className='d-flex justify-content-center align-items-center'>
+                            <LoadingSpinner />
+                        </div> : renderMessages(messages)
+                    }
                 </div>
                 <div className={`${styles['message-input']} d-flex align-items-center`}>
                     <div className={`${styles['admin-img']}`}>
                         <img className='w-100' src={adminImg} alt='admin' />
                     </div>
-                    <p className={`${styles['input-message']} ms-2 p-2 w-100 h-100 m-0 `} ref={inputElement} contenteditable="true" placeholder='Enter Message!'></p>
+                    <p className={`${styles['input-message']} ms-2 p-2 w-100 h-100 m-0 `} ref={inputElement} contenteditable="true"></p>
                     <div className='d-flex'>
                         <FontAwesomeIcon className={`${styles['smile-icon']} ms-3`} icon={faLink} />
                         <FontAwesomeIcon icon={faSmile} className={`${styles['smile-icon']} ms-3`} />
