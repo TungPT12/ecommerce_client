@@ -9,7 +9,7 @@ import { useSelector } from "react-redux";
 import { getRoomChatByUserIdApi, sendMessageApi } from '../../apis/chat';
 import LoadingSpinner from '../Loading/LoadingSpinner';
 
-function ChatScreen({ roomId }) {
+function ChatScreen({ roomId, setShowChat }) {
     const socket = io('http://localhost:5000');
     const { id } = useSelector(state => state.authn);
     const [messages, setMessages] = useState([]);
@@ -34,6 +34,7 @@ function ChatScreen({ roomId }) {
                 console.log(error)
             })
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
     const sendMessage = () => {
@@ -50,7 +51,7 @@ function ChatScreen({ roomId }) {
         return messages.map((message) => {
             if (message.isClient) {
                 const newMessage = `<div style="display: flex; margin-top: 4px;">
-                                        <div>${message.message}</div>
+                                        <div style="overflow-wrap: anywhere;">${message.message}</div>
                                     </div>`
                 return <div className={` d-flex justify-content-end row`}>
                     <span className={`${styles['message-customer']} font-italic bg-message-customer text-end text-light w-fit-content p-2`}
@@ -60,7 +61,7 @@ function ChatScreen({ roomId }) {
             } else {
                 const newMessage = `<div style="display: flex; margin-top: 4px;">
                                         <div style="margin-right: 4px;">ADMIN: </div>
-                                        <div>${message.message}</div>
+                                        <div style="overflow-wrap: anywhere;">${message.message}</div>
                                     </div>`
                 return <div className={`row ${styles['wrap-message-admin']}`}>
                     <div className={`${styles['admin-img']}`}>
