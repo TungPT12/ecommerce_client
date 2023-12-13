@@ -9,7 +9,7 @@ import { useSelector } from "react-redux";
 import { getRoomChatByUserIdApi, sendMessageApi } from '../../apis/chat';
 import LoadingSpinner from '../Loading/LoadingSpinner';
 
-function ChatScreen({ roomId, setShowChat }) {
+function ChatScreen({ roomId, setRoomId, setShowChat }) {
     const socket = io('http://localhost:5000');
     const { id } = useSelector(state => state.authn);
     const [messages, setMessages] = useState([]);
@@ -34,6 +34,14 @@ function ChatScreen({ roomId, setShowChat }) {
                 console.log(error)
             })
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [])
+
+    useEffect(() => {
+        socket.on("deleteRoomChat", id => {
+            setRoomId('');
+            setShowChat(false);
+        })
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 

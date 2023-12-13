@@ -26,7 +26,7 @@ function Chat() {
         <>
             <ChatIcon createRoomChatFn={createRoomChat} />
             {
-                showChat ? <ChatScreen roomId={roomId} setShowChat={setShowChat} /> : <></>
+                showChat ? <ChatScreen roomId={roomId} setRoomId={setRoomId} setShowChat={setShowChat} /> : <></>
             }
         </>
     );
