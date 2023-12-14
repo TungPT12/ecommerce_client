@@ -39,6 +39,7 @@ function ProductDetail({ id, name, price, images, short_desc, long_desc, categor
 
     const addToCart = (id, quantity) => {
         addToCartApi(token, id, quantity).then((response) => {
+            console.log(response)
             if (response.status === 500) {
                 throw new Error('/500');
             }
@@ -55,9 +56,14 @@ function ProductDetail({ id, name, price, images, short_desc, long_desc, categor
             if (error.message === '/500' || error.message === '/400' || error.message === '/404') {
                 navigate(error.message)
             } else if (error.message === '/403') {
-                authnAction.logout();
+                dispatch(cartAction.setCart({
+                    items: [],
+                    totalQuantity: 0
+                }))
+                dispatch(authnAction.logout())
+                navigate('/login')
             } else {
-                cartAction.setCart(cart)
+                dispatch(cartAction.setCart(cart))
                 alert('Sorry something went wrong!')
             }
         })
@@ -101,6 +107,7 @@ function ProductDetail({ id, name, price, images, short_desc, long_desc, categor
 
     useEffect(() => {
         setImageShow(images[0])
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     return (
@@ -149,7 +156,7 @@ function ProductDetail({ id, name, price, images, short_desc, long_desc, categor
                                     }
                                     }>
                                     Add to cart
-                                </button> : <Link to="/signin" className={`${styles['add-to-cart__btn__not-login']}  d-flex align-items-center text-decoration-none font-italic border-0 bg-black px-3 user-select-none`} >
+                                </button> : <Link to="/login" className={`${styles['add-to-cart__btn__not-login']}  d-flex align-items-center text-decoration-none font-italic border-0 bg-black px-3 user-select-none`} >
                                     Add to cart
                                 </Link>
                             }

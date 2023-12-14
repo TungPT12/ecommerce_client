@@ -1,5 +1,4 @@
 
-import axiosInstance from "../config/axios";
 import axiosCustomerInstance from "../config/axiosCustomer";
 import setHeaders from "../util/setHeaders";
 
