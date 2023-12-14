@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import ChatIcon from "./ChatIcon";
 import ChatScreen from "./ChatScreen";
 import { useSelector } from "react-redux";
