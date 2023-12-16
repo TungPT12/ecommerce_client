@@ -8,7 +8,9 @@ checkout, view product detail, login, logout, get cart.
 ## Link Live
 
 * https://tung-store.netlify.app
-
+* account for admin : 
+    - email: tung@gmail.com
+    - password: 12345678
 
 ## Build Withs
 
