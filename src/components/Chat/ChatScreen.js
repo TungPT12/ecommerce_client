@@ -10,8 +10,8 @@ import { getRoomChatByUserIdApi, sendMessageApi } from '../../apis/chat';
 import LoadingSpinner from '../Loading/LoadingSpinner';
 
 function ChatScreen({ roomId, setRoomId, setShowChat }) {
-    // const socket = io('https://tungstore.onrender.com');
-    const socket = io('http://localhost:5000');
+    const socket = io('https://tungstore.onrender.com');
+    // const socket = io('http://localhost:5000');
     const { id } = useSelector(state => state.authn);
     const [messages, setMessages] = useState([]);
     const [room] = useState(roomId);

@@ -32,3 +32,7 @@
 .sign-up-link {
     font-size: 1.2rem;
 }
+
+.wrong {
+    border-radius: 4px;
+}

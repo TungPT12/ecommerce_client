@@ -82,7 +82,7 @@ function SignIn() {
             }
             <div className={`container w-fit-content bg-light ${styles['sign-in']}`}>
                 <h3 className={`${styles['title']}`}>Sign In</h3>
-                {wrongUser ? <p>Wrong username or password</p> : <></>}
+                {wrongUser ? <p className={`${styles['wrong']} alert-danger text-danger bg-danger-subtle px-2 mb-2 font-italic`}>* Wrong username or password</p> : <></>}
                 <form onSubmit={(e) => {
                     e.preventDefault();
                     setIsLoadingSpinnerModal(true);
