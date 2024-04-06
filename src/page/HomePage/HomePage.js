@@ -8,7 +8,6 @@ import { useNavigate } from "react-router-dom";
 import { checkIsLoginApi } from "../../apis/authn";
 import { authnAction } from "../../store/slice/authn";
 import { cartAction } from "../../store/slice/cart";
-import { useInView } from "react-intersection-observer";
 
 function HomePage() {
     const navigate = useNavigate();

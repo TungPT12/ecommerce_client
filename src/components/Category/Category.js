@@ -1,14 +1,13 @@
-import product_1 from "../../assets/images/product_1.png"
-import product_2 from "../../assets/images/product_2.png"
-import product_3 from "../../assets/images/product_3.png"
-import product_4 from "../../assets/images/product_4.png"
-import product_5 from "../../assets/images/product_5.png"
 import { useNavigate } from "react-router-dom";
 import styles from './Category.module.css'
 import { useEffect, useState } from "react"
 import LoadingSpinner from "../Loading/LoadingSpinner"
 import { getCategoriesApi } from "../../apis/category"
-function Category({ ref }) {
+import { useInView } from "react-intersection-observer";
+function Category() {
+
+    const { ref, inView } = useInView();
+
     const navigate = useNavigate();
     const [isLoading, setIsLoading] = useState(true);
     const [categories, setCategories] = useState([]);
@@ -49,10 +48,10 @@ function Category({ ref }) {
             }
         })
         return <>
-            <div className="d-flex gap-3 animation-from-left">
+            <div className={`d-flex gap-3 ${inView ? 'animation-from-left' : ''}`}>
                 {firstRow}
             </div>
-            <div className="d-flex gap-3 animation-from-right">
+            <div className={`d-flex gap-3 ${inView ? 'animation-from-right' : ''}`}>
                 {secondRow}
             </div>
         </>
