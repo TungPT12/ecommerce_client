@@ -1,0 +1,10 @@
+.browse_collection-btn {
+    font-size: 1.2rem;
+    font-family: 'Raleway';
+    font-weight: 100;
+}
+
+.browse_collection-btn:hover {
+    opacity: .6;
+}
+

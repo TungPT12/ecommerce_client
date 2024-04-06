@@ -1,0 +1,38 @@
+@import url('https://fonts.googleapis.com/css2?family=Sora:wght@100;200;300;400&display=swap');
+
+.checkout-info {
+    flex: 3;
+}
+
+.checkout-info label {
+    font-size: 1.2rem;
+    font-weight: 700;
+    letter-spacing: 2.8px;
+}
+
+.checkout-info .input-info {
+    border: 1px solid #0000002e;
+    outline: none;
+    opacity: .8;
+}
+
+
+.bill {
+    padding: 3rem 2.7rem;
+    flex: 1;
+    background-color: #c1c5c936;
+}
+
+.item {
+    border-bottom: 1px solid #0000002b;
+}
+
+.total-price {
+    font-family: 'Sora', sans-serif;
+    font-size: 1.2rem;
+}
+
+.place-order:hover {
+    opacity: .8;
+    cursor: pointer;
+}

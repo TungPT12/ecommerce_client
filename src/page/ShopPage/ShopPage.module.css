@@ -1,0 +1,51 @@
+.brand-title {
+    color: #ffffffb0;
+}
+
+.navbar-product {
+    flex: 1;
+}
+
+.product-title {
+    background-color: #c1c5c936;
+    color: #151616b0;
+}
+
+.product-title-name {
+    color: #939393;
+    cursor: pointer;
+}
+
+.product-filter {
+    flex: 4;
+}
+
+.search-input {
+    opacity: .9;
+    outline: none;
+    border: 1px solid #908e8e75;
+}
+
+.product-list {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    row-gap: 1rem;
+    column-gap: 1rem;
+}
+
+.pre-btn,
+.next-btn {
+    box-sizing: border-box;
+    background-color: #fff;
+    border: 1px solid #93939354;
+    margin: 0;
+}
+
+.number-page {
+    color: #fff;
+    font-size: 1rem;
+}
+
+.active {
+    color: rgb(224, 177, 90);
+}

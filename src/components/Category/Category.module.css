@@ -1,0 +1,13 @@
+.category-img:hover {
+    opacity: .5;
+}
+
+.category-images_browse {
+    grid-template-columns: 1fr 1fr 1fr;
+}
+
+.first-row {}
+
+.category-1 {}
+
+.category-2 {}

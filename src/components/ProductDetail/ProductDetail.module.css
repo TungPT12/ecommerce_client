@@ -1,0 +1,59 @@
+.price {
+    font-size: 1.5rem;
+}
+
+.change-quantity {
+    border: 1px solid #d3d3d3;
+}
+
+.add-to-cart__btn__not-login,
+.add-to-cart__btn {
+    color: #fff9f9d1;
+}
+
+.caret-left-icon:hover,
+.caret-right-icon:hover,
+.trash-icon:hover {
+    opacity: .6;
+    cursor: pointer;
+}
+
+.quantity-input {
+    font-family: 'Times New Roman', Times, serif;
+    font-size: 1.2rem;
+    width: 2rem;
+    text-align: center;
+    border: none;
+    outline: none;
+}
+
+.description {
+    font-family: inherit;
+    font-size: 0.9rem;
+    white-space: pre-line;
+    word-spacing: 0.3rem;
+    font-style: italic;
+}
+
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+    -moz-appearance: textfield;
+}
+
+.image {
+    border: solid 1px #fff;
+}
+
+.image:hover {
+    border: solid 1px #ebe7e7;
+    padding: 4px;
+    border-radius: 5px;
+    transition: all 0.1s;
+}

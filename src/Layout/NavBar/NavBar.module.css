@@ -1,0 +1,67 @@
+.navbar {
+    font-size: 1.4rem;
+}
+
+.active {
+    color: rgb(224, 177, 90);
+}
+
+.logo {
+    font-size: 1.4rem;
+    font-style: italic;
+    font-weight: 300;
+}
+
+.navbar-icon {
+    color: #000;
+}
+
+.quantity-item-cart {
+    padding: 1px 5.5px;
+    font-size: 0.9rem;
+    right: -8px;
+    top: -8px;
+    color: white;
+    font-weight: 600;
+    background-color: red;
+    border-radius: 8px;
+    z-index: 1;
+    text-align: center;
+    line-height: 100%;
+}
+
+.navbar-popup {
+    background-color: #fff;
+    margin-top: 2.1rem;
+    z-index: 1;
+    width: 10rem;
+    left: 31px;
+    position: relative;
+}
+
+.show-popup-icon:hover {
+    cursor: pointer;
+
+}
+
+.show-popup-icon:hover .navbar-popup {
+    display: block !important;
+}
+
+.show-popup-icon:hover .icon-show-popup {
+    opacity: .5;
+}
+
+.logout,
+.order {
+    padding-left: 0.5rem;
+    font-size: 18px;
+    font-style: normal;
+    color: #6a6a6a;
+}
+
+.logout:hover,
+.order:hover {
+    background: #d6d3d3;
+    box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+}

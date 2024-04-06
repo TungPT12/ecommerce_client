@@ -1,0 +1,45 @@
+.product {
+    cursor: pointer;
+    height: 100%;
+}
+
+.product:hover {
+    opacity: .5;
+}
+
+.product-popup {
+    height: 90%;
+    background-color: #fff;
+    width: 90%;
+}
+
+.img-popup {
+    flex: 1;
+}
+
+.description-popup {
+    flex: 1;
+}
+
+.popup-price {
+    color: #00000087;
+}
+
+.short-desc {
+    color: #b4acac;
+}
+
+.icon {
+    color: #ab9f9f;
+    width: fit-content;
+    height: fit-content;
+}
+
+.icon:hover {
+    color: #fff;
+    background-color: red;
+}
+
+.view-detail-btn {
+    color: #dcd9d9;
+}
