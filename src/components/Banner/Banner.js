@@ -7,7 +7,6 @@ function Banner() {
     const { ref: refBanner, inView: inViewBanner } = useInView({
         threshold: 0
     });
-    console.log(inViewBanner)
     return (
         <div ref={refBanner} className="banner mt-2 position-relative font-family-Ubuntu">
             <div className={`position-absolute justify-content-center w-25 ms-5 d-flex h-100 flex-column ${inViewBanner ? 'animation-from-left' : ''} z-1`}>
